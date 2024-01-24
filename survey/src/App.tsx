@@ -17,6 +17,8 @@ import { faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faSquareCheck } from '@fortawesome/free-regular-svg-icons';
 import { faCircleCheck } from '@fortawesome/free-regular-svg-icons';
 import { faBarsStaggered } from '@fortawesome/free-solid-svg-icons';
+import TitleAndDescription from './TitleAndDescription';
+
 
 const App: React.FC = () => {
   const [isTitleEditing, setIsTitleEditing] = useState<boolean>(false);
@@ -52,29 +54,24 @@ const App: React.FC = () => {
     <div className="app-container">
       <div className="survey-container">
         <div className="survey-header" style={{ position: 'relative' }}>
-        {/* <h2 onClick={handleTitleClick}>{title}</h2> */}
-        <h2 className={isTitleEditing ? 'hidden' : ''} style={{margin: '0', padding: '0'}} onClick={handleTitleClick}>{title}</h2>
-        {isTitleEditing && (
-            <input
-              type="text"
-              value={title}
-              onChange={handleTitleChange}
-              onBlur={handleTitleBlur}
-              autoFocus
-              className='title-editing-input'
-            />
-          )}
-          <p className={isDescriptionEditing ? 'hidden' : ''} style={{margin: '0', padding: '0'}} onClick={handleDescriptionClick}>{description}</p>
-          {isDescriptionEditing && (
-            <input
-              type="text"
-              value={description}
-              onChange={handleDescriptionChange}
-              onBlur={handleDescriptionBlur}
-              autoFocus
-              className='description-editing-input'
-            />
-          )}
+        <TitleAndDescription
+            isEditing={isTitleEditing}
+            value={title}
+            onBlur={handleTitleBlur}
+            onChange={handleTitleChange}
+            onClick={handleTitleClick}
+            className='title-editing-input'
+            type='title'
+          />
+          <TitleAndDescription
+            isEditing={isDescriptionEditing}
+            value={description}
+            onBlur={handleDescriptionBlur}
+            onChange={handleDescriptionChange}
+            onClick={handleDescriptionClick}
+            className='description-editing-input'
+            type='description'
+          />
         </div>
       </div>
 
