@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
@@ -18,14 +18,63 @@ import { faSquareCheck } from '@fortawesome/free-regular-svg-icons';
 import { faCircleCheck } from '@fortawesome/free-regular-svg-icons';
 import { faBarsStaggered } from '@fortawesome/free-solid-svg-icons';
 
-
 const App: React.FC = () => {
+  const [isTitleEditing, setIsTitleEditing] = useState<boolean>(false);
+  const [isDescriptionEditing, setIsDescriptionEditing] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>('제목 없는 설문지');
+  const [description, setDescription] = useState<string>('설문지 설명');
+
+  const handleTitleClick = () => {
+    setIsTitleEditing(true);
+  };
+  const handleDescriptionClick = () => {
+    setIsDescriptionEditing(true);
+  };
+
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+  };
+
+  const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDescription(event.target.value);
+  };
+
+  // 사용자가 입력 필드(input field) 외부를 클릭했을 때 호출되는 이벤트 핸들러
+  const handleTitleBlur = () => {
+    setIsTitleEditing(false);
+  };
+
+  const handleDescriptionBlur = () => {
+    setIsDescriptionEditing(false);
+  };
+
   return (
     <div className="app-container">
       <div className="survey-container">
-        <div className="survey-header">
-          <h2>제목 없는 설문지</h2>
-          <p>설문지 설명</p>
+        <div className="survey-header" style={{ position: 'relative' }}>
+        {/* <h2 onClick={handleTitleClick}>{title}</h2> */}
+        <h2 className={isTitleEditing ? 'hidden' : ''} style={{margin: '0', padding: '0'}} onClick={handleTitleClick}>{title}</h2>
+        {isTitleEditing && (
+            <input
+              type="text"
+              value={title}
+              onChange={handleTitleChange}
+              onBlur={handleTitleBlur}
+              autoFocus
+              className='title-editing-input'
+            />
+          )}
+          <p className={isDescriptionEditing ? 'hidden' : ''} style={{margin: '0', padding: '0'}} onClick={handleDescriptionClick}>{description}</p>
+          {isDescriptionEditing && (
+            <input
+              type="text"
+              value={description}
+              onChange={handleDescriptionChange}
+              onBlur={handleDescriptionBlur}
+              autoFocus
+              className='description-editing-input'
+            />
+          )}
         </div>
       </div>
 
