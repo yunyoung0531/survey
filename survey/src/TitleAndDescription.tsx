@@ -21,30 +21,30 @@ const TitleAndDescription: React.FC<TitleAndDescriptionProps> = ({
     className,
     type
 }) => {
-    const Element = type === 'title' ? 'h2' : 'p';
-    const additionalClassName = type === 'title' ? 'title-editing-input' : 'description-editing-inpu';
+    const additionalClassName = type === 'title' ? 'title-editing-input' : 'description-editing-input';
+    const TextElement = type === 'title' ? 'h2' : 'p';
+
     return (
-    <>
-        
-        {!isEditing ? (
-                <Element
-                    className={`${className} ${additionalClassName}`}
-                    onClick={onClick}
+        <>
+            {!isEditing ? (
+                <TextElement
+                className={`${className} ${additionalClassName}`}
+                onClick={onClick}
                 >
-                    {value}
-                </Element>
+                {value}
+                </TextElement>
             ) : (
                 <input
-                    type="text"
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    autoFocus
-                    className={`${className} ${additionalClassName} editing-input`}
+                type="text"
+                value={value}
+                onChange={onChange}
+                onBlur={onBlur}
+                autoFocus
+                className={`${className} ${additionalClassName} editing-input`}
                 />
             )}
-    </>
+        </>
     );
-};
+}
 
 export default TitleAndDescription;

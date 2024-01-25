@@ -4,8 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
 import { faImage } from '@fortawesome/free-regular-svg-icons'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Dropdown, Form } from 'react-bootstrap';
-import { faCircleDot } from '@fortawesome/free-regular-svg-icons';
+import { Form } from 'react-bootstrap';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
@@ -14,11 +13,8 @@ import { faFileImport } from '@fortawesome/free-solid-svg-icons';
 import { faEquals } from '@fortawesome/free-solid-svg-icons';
 import { faT } from '@fortawesome/free-solid-svg-icons';
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
-import { faSquareCheck } from '@fortawesome/free-regular-svg-icons';
-import { faCircleCheck } from '@fortawesome/free-regular-svg-icons';
-import { faBarsStaggered } from '@fortawesome/free-solid-svg-icons';
 import TitleAndDescription from './TitleAndDescription';
-
+import QuestionTypeDropdown from './QuestionTypeDropdown';
 
 const App: React.FC = () => {
   const [isTitleEditing, setIsTitleEditing] = useState<boolean>(false);
@@ -48,6 +44,13 @@ const App: React.FC = () => {
 
   const handleDescriptionBlur = () => {
     setIsDescriptionEditing(false);
+  };
+
+
+  const [questionType, setQuestionType] = useState<string>('객관식 질문');
+  // 질문 유형 변경 핸들러
+  const handleQuestionTypeChange = (type: string) => {
+    setQuestionType(type);
   };
 
   return (
@@ -87,20 +90,10 @@ const App: React.FC = () => {
                 <span className='icon-outside'>
                 <span className="icon-dropdown-container">
                   <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faImage} />
-                <Dropdown className='drop-down' style={{marginLeft: '20px'}}>
-                  <Dropdown.Toggle id="dropdown-basic">
-                  <FontAwesomeIcon style={{color: '#5e5e5e', marginRight: '8px'}} icon={faCircleDot} />
-                    객관식 질문ㅤㅤ
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1"><FontAwesomeIcon className='dropdown-icon' icon={faBarsStaggered} />단답형</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2"><FontAwesomeIcon className='dropdown-icon' icon={faBarsStaggered} />장문형</Dropdown.Item>
-                    <Dropdown.Divider />
-                    <Dropdown.Item href="#/action-3"><FontAwesomeIcon className='dropdown-icon' icon={faCircleDot} />객관식 질문</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3"><FontAwesomeIcon className='dropdown-icon' icon={faSquareCheck} />체크박스</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3"><FontAwesomeIcon className='dropdown-icon' icon={faCircleCheck} />드롭다운 </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
+                  <QuestionTypeDropdown
+                    selectedType={questionType}
+                    onSelectType={handleQuestionTypeChange}
+                  />
                 </span>
                 </span>
               </div>
