@@ -26,19 +26,20 @@ const Question: React.FC<QuestionProps> = ({ questionTitle }) => {
         <FontAwesomeIcon icon={faEllipsis}/>
         </div>
         <div className='question-title-container'>
-        <div className="question-title">
+        {/* <div className="question-title"> */}
             <div className="question-text">
-                <h4>{questionTitle}</h4>
+            <h4>{questionTitle}</h4>
             </div>
-            <div className='icon-outside'>
-                <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer', }} icon={faImage} />
-                <QuestionTypeDropdown
-                    selectedType={questionType}
-                    onSelectType={handleQuestionTypeChange}
-                />
-            </div>
+            <span className='icon-outside'>
+            
+            <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faImage} />
+            <QuestionTypeDropdown
+                selectedType={questionType}
+                onSelectType={handleQuestionTypeChange}
+            />
+            </span>
+        {/* </div> */}
         </div>
-    </div>
       {/* 다른 질문 옵션들은 여기에 추가 */}
         <div className="question-options">
                 <label className="option">
@@ -69,4 +70,4 @@ const Question: React.FC<QuestionProps> = ({ questionTitle }) => {
     );
 };
 
-export default Question;
+export default Question
