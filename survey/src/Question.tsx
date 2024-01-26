@@ -14,9 +14,10 @@ interface QuestionProps {
     questionType: string;
     onDuplicate: () => void;
     onQuestionTypeChange: (type: string) => void;
+    onDelete: () => void; // 삭제 이벤트 핸들러
 }
 
-const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDuplicate, onQuestionTypeChange }) => {
+const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDuplicate, onQuestionTypeChange, onDelete }) => {
     // const [questionType, setQuestionType] = useState<string>('객관식 질문');
 
     const handleQuestionTypeChange = (newType: string) => {
@@ -58,7 +59,9 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                 <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faCopy}
                 onClick={onDuplicate}
                 />
-                <FontAwesomeIcon style={{color: '#5e5e5e'}} icon={faTrashCan} />
+                <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faTrashCan} 
+                onClick={onDelete}
+                />
                 <span className='question-tail-option'>
                 ㅤ필수
                 <Form>

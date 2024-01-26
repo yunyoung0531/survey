@@ -74,7 +74,12 @@ interface QuestionData {
         const questionToCopy = { ...newQuestions[index] };
         newQuestions.splice(index + 1, 0, questionToCopy);
         setQuestions(newQuestions);
-      };
+    };
+
+    //삭제 기능 
+    const deleteQuestion = (index: number) => {
+      setQuestions(questions.filter((_, questionIndex) => questionIndex !== index));
+    };
   
 
     return (
@@ -118,6 +123,7 @@ interface QuestionData {
                   updatedQuestions[index] = { ...updatedQuestions[index], type: newType };
                   setQuestions(updatedQuestions);
                 }}
+                onDelete={() => deleteQuestion(index)} // 삭제 이벤트 핸들러 추가
               />
               </div>
             ))}
