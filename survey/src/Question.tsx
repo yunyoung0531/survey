@@ -44,7 +44,9 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                     </label>
                     <label className="option">
                         <input type="radio" name="option" value="option2" />
-                        <span>옵션 추가 또는 기타 추가</span>
+                        <span className='plus-option'>옵션 추가</span>
+                        <span> 또는</span>
+                        <span className='plus-etc'> '기타' 추가</span>
                     </label>
                 </>);
             case '체크박스ㅤ':
@@ -96,17 +98,6 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
             </span>
         {/* </div> */}
         </div>
-      {/* 다른 질문 옵션들은 여기에 추가 */}
-            {/* <div className="question-options">
-                <label className="option">
-                <input type="radio" name="option" value="option1" />
-                <span>옵션 1</span>
-                </label>
-                <label className="option">
-                <input type="radio" name="option" value="option2" />
-                <span>옵션 추가 또는 기타 추가</span>
-                </label>
-            </div> */}
             <div className="question-options">
             {renderQuestionContent()}
             </div>
