@@ -8,6 +8,12 @@ import { faCopy } from '@fortawesome/free-regular-svg-icons';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import './App.css';
+// import { ShortAnswer } from './ShortAnswer';
+// import { LongAnswer } from './LongAnswer';
+// import { MultipleChoice } from './MultipleChoice';
+// import { Checkbox } from './Checkbox';
+// import { DropdownQuestion } from './DropdownQuestion';
+
 
 interface QuestionProps {
     questionTitle: string;
@@ -22,7 +28,53 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
 
     const handleQuestionTypeChange = (newType: string) => {
         onQuestionTypeChange(newType); // 상위 컴포넌트에서 전달받은 핸들러를 호출
-};
+    };
+
+    const renderQuestionContent = () => {
+        switch (questionType) {
+            case '단답형ㅤㅤ':
+                return <div className="custom-input">단답형 텍스트</div>;
+            case '장문형ㅤㅤ':
+                return <textarea className="form-control" placeholder="장문형 텍스트"></textarea>;
+            case '객관식 질문': 
+                return (<>
+                    <label className="option">
+                        <input type="radio" name="option" value="option1" />
+                        <span>옵션 1</span>
+                    </label>
+                    <label className="option">
+                        <input type="radio" name="option" value="option2" />
+                        <span>옵션 추가 또는 기타 추가</span>
+                    </label>
+                </>);
+            case '체크박스ㅤ':
+                return (<>
+                    <label className="option">
+                        <input type="radio" name="option" value="option1" />
+                        <span>옵션 1</span>
+                    </label>
+                    <label className="option">
+                        <input type="radio" name="option" value="option2" />
+                        <span>옵션 추가 또는 기타 추가</span>
+                    </label>
+                </>);
+            case '드롭다운ㅤ':
+                return (<>
+                    <label className="option">
+                        <input type="radio" name="option" value="option1" />
+                        <span>옵션 1</span>
+                    </label>
+                    <label className="option">
+                        <input type="radio" name="option" value="option2" />
+                        <span>옵션 추가</span>
+                    </label>
+                </>);
+            default:
+                return (<>
+                    test
+                </>);
+            }
+    };
 
     return (
     <div className="survey-question">
@@ -45,7 +97,7 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
         {/* </div> */}
         </div>
       {/* 다른 질문 옵션들은 여기에 추가 */}
-        <div className="question-options">
+            {/* <div className="question-options">
                 <label className="option">
                 <input type="radio" name="option" value="option1" />
                 <span>옵션 1</span>
@@ -54,6 +106,9 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                 <input type="radio" name="option" value="option2" />
                 <span>옵션 추가 또는 기타 추가</span>
                 </label>
+            </div> */}
+            <div className="question-options">
+            {renderQuestionContent()}
             </div>
             <div className='question-tail'>
                 <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faCopy}
