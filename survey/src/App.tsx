@@ -1,4 +1,4 @@
-  import React, { useState } from 'react';
+import React, { useState } from 'react';
   import './App.css';
   import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
   import { faImage } from '@fortawesome/free-regular-svg-icons'
@@ -11,6 +11,13 @@
   import TitleAndDescription from './TitleAndDescription';
   import QuestionTypeDropdown from './QuestionTypeDropdown';
   import Question from './Question';
+
+
+  // 각 질문의 제목과 유형을 저장하기 위한 새로운 인터페이스
+interface QuestionData {
+  title: string;
+  type: string;
+}
 
 
   const App: React.FC = () => {
@@ -50,13 +57,25 @@
       setQuestionType(type);
     };
 
-    const [questions, setQuestions] = useState<string[]>(['제목없는 질문']);
+    const [questions, setQuestions] = useState<QuestionData[]>([
+      { title: '제목없는 질문', type: '객관식 질문' }
+    ]);
 
-    // 새 질문을 추가하는 함수
+      // 새 질문을 추가하는 함수
     const addNewQuestion = () => {
-      setQuestions(questions.concat(`새로운 질문 ${questions.length + 1}`));
+      setQuestions(questions.concat({ title: `새로운 질문 ${questions.length + 1}`, type: '객관식 질문' }));
     };
 
+
+      // 질문을 복제하는 함수
+    const duplicateQuestion = (index: number) => {
+        // 현재 질문을 복제하고 배열에 추가
+        const newQuestions = [...questions];
+        const questionToCopy = { ...newQuestions[index] };
+        newQuestions.splice(index + 1, 0, questionToCopy);
+        setQuestions(newQuestions);
+      };
+  
 
     return (
       <div className="app-container">
@@ -87,9 +106,19 @@
         <div className='content-container' >
           
           <div className='sur-test'>
-            {questions.map((questionTitle, index) => (
+            {questions.map((question, index) => (
               <div className='survey-container-detail' key={index}>
-              <Question questionTitle={questionTitle}/>
+              <Question
+                questionTitle={question.title}
+                questionType={question.type}
+                onDuplicate={() => duplicateQuestion(index)}
+                onQuestionTypeChange={(newType) => {
+                  // 질문 유형을 변경하는 새 함수
+                  const updatedQuestions = [...questions];
+                  updatedQuestions[index] = { ...updatedQuestions[index], type: newType };
+                  setQuestions(updatedQuestions);
+                }}
+              />
               </div>
             ))}
           </div>

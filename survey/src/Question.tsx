@@ -11,20 +11,23 @@ import './App.css';
 
 interface QuestionProps {
     questionTitle: string;
+    questionType: string;
+    onDuplicate: () => void;
+    onQuestionTypeChange: (type: string) => void;
 }
 
-const Question: React.FC<QuestionProps> = ({ questionTitle }) => {
-    const [questionType, setQuestionType] = useState<string>('객관식 질문');
+const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDuplicate, onQuestionTypeChange }) => {
+    // const [questionType, setQuestionType] = useState<string>('객관식 질문');
 
-    const handleQuestionTypeChange = (type: string) => {
-    setQuestionType(type);
+    const handleQuestionTypeChange = (newType: string) => {
+        onQuestionTypeChange(newType); // 상위 컴포넌트에서 전달받은 핸들러를 호출
 };
 
     return (
     <div className="survey-question">
         <div className='drag-drop'>
         <FontAwesomeIcon icon={faEllipsis}/>
-        </div>
+        </div>  
         <div className='question-title-container'>
         {/* <div className="question-title"> */}
             <div className="question-text">
@@ -52,7 +55,9 @@ const Question: React.FC<QuestionProps> = ({ questionTitle }) => {
                 </label>
             </div>
             <div className='question-tail'>
-                <FontAwesomeIcon style={{color: '#5e5e5e'}} icon={faCopy} />
+                <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faCopy}
+                onClick={onDuplicate}
+                />
                 <FontAwesomeIcon style={{color: '#5e5e5e'}} icon={faTrashCan} />
                 <span className='question-tail-option'>
                 ㅤ필수
@@ -70,4 +75,4 @@ const Question: React.FC<QuestionProps> = ({ questionTitle }) => {
     );
 };
 
-export default Question
+export default Question;
