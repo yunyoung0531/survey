@@ -36,7 +36,13 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
     const addOption = (type: string) => {
         onAddOption(`옵션 ${(options.length+1) + 1}`, type); 
     };
+    const addOtherOption = () => {
+        onAddOption('기타...', questionType); 
+    };
+    
     const renderQuestionContent = () => {
+        const hasOtherOption = options.includes('기타');
+
         switch (questionType) {
             case '단답형ㅤㅤ':
                 return <div className="custom-input">단답형 텍스트</div>;
@@ -57,8 +63,12 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                     <label className="option">
                         <input type="radio" name="option" value="option1" />
                         <span className='plus-option' onClick={() => addOption('객관식 질문')}>옵션 추가</span>
-                        <span> 또는</span>
-                        <span className='plus-etc'> '기타' 추가</span>
+                        {!hasOtherOption && (
+                            <>
+                                <span> 또는</span>
+                                <span className='plus-etc' onClick={()=>{addOtherOption()}}> '기타' 추가</span>
+                            </>
+                        )}
                     </label>
                 </>);
             case '체크박스ㅤ':
@@ -76,7 +86,7 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                     <label className="option">
                         <span className='plus-option' onClick={()=>{addOption('체크박스ㅤ')}}>옵션 추가</span>
                         <span> 또는</span>
-                        <span className='plus-etc'> '기타' 추가</span>
+                        <span className='plus-etc' onClick={()=>{addOtherOption()}}> '기타' 추가</span>
                     </label>
                 </>);
             
@@ -92,10 +102,8 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                         </label>
                     ))}
                     <label className="option">
-                        <input type="radio" name="option" value="option1" />
                         <span className='plus-option' onClick={()=>{addOption('드롭다운ㅤ')}}>옵션 추가</span>
-                        <span> 또는</span>
-                        <span className='plus-etc'> '기타' 추가</span>
+                        
                     </label>
                 </>);
             default:
