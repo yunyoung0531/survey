@@ -35,7 +35,7 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
             case '단답형ㅤㅤ':
                 return <div className="custom-input">단답형 텍스트</div>;
             case '장문형ㅤㅤ':
-                return <textarea className="form-control" placeholder="장문형 텍스트"></textarea>;
+                return <div className="custom-input-long">장문형 텍스트</div>;
             case '객관식 질문': 
                 return (<>
                     <label className="option">
@@ -88,7 +88,7 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
             </div>
             <span className='icon-outside'>
             
-            <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faImage} />
+            <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer', marginTop: '-15px'}} size='lg' icon={faImage} />
             <QuestionTypeDropdown
                 selectedType={questionType}
                 onSelectType={handleQuestionTypeChange}

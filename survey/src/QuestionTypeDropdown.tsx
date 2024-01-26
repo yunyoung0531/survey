@@ -14,7 +14,7 @@ const QuestionTypeDropdown: React.FC<QuestionTypeDropdownProps> = ({ selectedTyp
         <Dropdown className='drop-down' style={{marginLeft: '20px'}}>
         <Dropdown.Toggle id="dropdown-basic" >
             <FontAwesomeIcon style={{color: '#5e5e5e', marginRight: '8px'}} icon={faCircleDot} />
-            {selectedType}ㅤ
+            {selectedType}
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
