@@ -18,7 +18,7 @@ interface QuestionData {
   id: string;
   title: string;
   type: string;
-
+  options: string[];
 }
 
 
@@ -60,7 +60,7 @@ interface QuestionData {
     };
 
     const [questions, setQuestions] = useState<QuestionData[]>([
-      { id: '제목없는 질문', title: '제목없는 질문', type: '객관식 질문'}
+      { id: '제목없는 질문', title: '제목없는 질문', type: '객관식 질문' , options: []}
     ]);
 
     // 새 질문을 추가하는 함수
@@ -70,6 +70,7 @@ interface QuestionData {
         id: newQuestionId,
         title: `새로운 질문 ${questions.length + 1}`,
         type: '객관식 질문',
+        options: []
       };
       setQuestions([...questions, newQuestion]); // 새 질문을 상태에 추가합니다.
     };
@@ -96,6 +97,28 @@ interface QuestionData {
       ));
     };
 
+    const addOptionToQuestion = (questionId: string, newOption: string) => {
+      setQuestions(questions.map(question => {
+        if (question.id === questionId) {
+          // 여기서 question.type을 사용합니다.
+          switch (question.type) {
+            case '객관식 질문':
+              return { ...question, options: [...question.options, newOption] };
+            case '체크박스ㅤ':
+              // 체크박스 옵션 추가 로직
+              return { ...question, options: [...question.options, newOption] };
+            case '드롭다운ㅤ':
+              // 드롭다운 옵션 추가 로직
+              return { ...question, options: [...question.options, newOption] };
+            default:
+              return question;
+          }
+        }
+        return question;
+      }));
+    };
+    
+    
 
     return (
       <div className="app-container">
@@ -138,8 +161,10 @@ interface QuestionData {
                   updatedQuestions[index] = { ...updatedQuestions[index], type: newType };
                   setQuestions(updatedQuestions);
                 }}
-                onDelete={() => deleteQuestion(index)} // 삭제 이벤트 핸들러 추가
+                onDelete={() => deleteQuestion(index)}
                 onUpdateTitle={(newTitle) => updateQuestionTitle(question.id, newTitle)}
+                options={question.options}
+                onAddOption={(newOption) => addOptionToQuestion(question.id, newOption)} // 여기에 question.type을 전달합니다.
               />
               </div>
             ))}

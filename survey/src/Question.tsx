@@ -16,9 +16,11 @@ interface QuestionProps {
     onQuestionTypeChange: (type: string) => void;
     onDelete: () => void; // 삭제 이벤트 핸들러
     onUpdateTitle: (newTitle: string) => void;
+    options: string[]; // 새로 추가한 옵션 목록
+    onAddOption: (option: string, type: string) => void; // 두 번째 인수로 type 추가
 }
 
-const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDuplicate, onQuestionTypeChange, onDelete, onUpdateTitle }) => {
+const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDuplicate, onQuestionTypeChange, onDelete, onUpdateTitle, options, onAddOption }) => {
     // const [questionType, setQuestionType] = useState<string>('객관식 질문');
 
     const handleQuestionTypeChange = (newType: string) => {
@@ -30,6 +32,10 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
         setEditTitle(e.target.value); // state 업데이트
         onUpdateTitle(e.target.value); // 상위 컴포넌트에 변경 사항 전달
     };
+
+    const addOption = (type: string) => {
+        onAddOption(`옵션 ${(options.length+1) + 1}`, type); 
+    };
     const renderQuestionContent = () => {
         switch (questionType) {
             case '단답형ㅤㅤ':
@@ -39,12 +45,18 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
             case '객관식 질문': 
                 return (<>
                     <label className="option">
-                        <input type="radio" name="option" value="option1" />
-                        <span>옵션 1</span>
+                    <input type="radio" name="option" />
+                    <span>옵션 1</span>
                     </label>
+                    {options.map((option, index) => (
+                        <label className="option" key={index}>
+                            <input type="radio" name="option" value={option} />
+                            <span>{option}</span>
+                        </label>
+                    ))}
                     <label className="option">
-                        <input type="radio" name="option" value="option2" />
-                        <span className='plus-option'>옵션 추가</span>
+                        <input type="radio" name="option" value="option1" />
+                        <span className='plus-option' onClick={() => addOption('객관식 질문')}>옵션 추가</span>
                         <span> 또는</span>
                         <span className='plus-etc'> '기타' 추가</span>
                     </label>
@@ -52,26 +64,38 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
             case '체크박스ㅤ':
                 return (<>
                     <label className="option">
-                        <input type="radio" name="option" value="option1" />
-                        <span>옵션 1</span>
+                    <input type="checkbox" name="option" />
+                    <span>옵션 1</span>
                     </label>
+                    {options.map((option, index) => (
+                        <label className="option" key={index}>
+                            <input type="checkbox" name="option" value={option} />
+                            <span>{option}</span>
+                        </label>
+                    ))}
                     <label className="option">
-                        <input type="radio" name="option" value="option2" />
-                        <span className='plus-option'>옵션 추가</span>
+                        <span className='plus-option' onClick={()=>{addOption('체크박스ㅤ')}}>옵션 추가</span>
                         <span> 또는</span>
                         <span className='plus-etc'> '기타' 추가</span>
                     </label>
                 </>);
+            
             case '드롭다운ㅤ':
                 return (<>
                     <label className="option">
-                        {/* <input type="radio" name="option" value="option1" /> */}
                         <span>1 옵션 1</span>
                     </label>
+                    {options.map((option, index) => (
+                        <label className="option" key={index}>
+                            {/* <input type="checkbox" name="option" value={option} /> */}
+                            <span>{index+2} {option}</span>
+                        </label>
+                    ))}
                     <label className="option">
-                        {/* <input type="radio" name="option" value="option2" /> */}
-                        <span className=''>2 </span>
-                        <span className='plus-option'> 옵션 추가</span>
+                        <input type="radio" name="option" value="option1" />
+                        <span className='plus-option' onClick={()=>{addOption('드롭다운ㅤ')}}>옵션 추가</span>
+                        <span> 또는</span>
+                        <span className='plus-etc'> '기타' 추가</span>
                     </label>
                 </>);
             default:
