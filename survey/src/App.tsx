@@ -15,8 +15,10 @@ import React, { useState } from 'react';
 
   // 각 질문의 제목과 유형을 저장하기 위한 새로운 인터페이스
 interface QuestionData {
+  id: string;
   title: string;
   type: string;
+
 }
 
 
@@ -58,12 +60,18 @@ interface QuestionData {
     };
 
     const [questions, setQuestions] = useState<QuestionData[]>([
-      { title: '제목없는 질문', type: '객관식 질문' }
+      { id: '제목없는 질문', title: '제목없는 질문', type: '객관식 질문'}
     ]);
 
-      // 새 질문을 추가하는 함수
+    // 새 질문을 추가하는 함수
     const addNewQuestion = () => {
-      setQuestions(questions.concat({ title: `새로운 질문 ${questions.length + 1}`, type: '객관식 질문' }));
+      const newQuestionId = `question-${questions.length + 1}`;
+      const newQuestion: QuestionData = {
+        id: newQuestionId,
+        title: `새로운 질문 ${questions.length + 1}`,
+        type: '객관식 질문',
+      };
+      setQuestions([...questions, newQuestion]); // 새 질문을 상태에 추가합니다.
     };
 
 
@@ -81,6 +89,13 @@ interface QuestionData {
       setQuestions(questions.filter((_, questionIndex) => questionIndex !== index));
     };
   
+    // 질문의 제목을 업데이트하는 함수
+    const updateQuestionTitle = (id: string, newTitle: string) => {
+      setQuestions(questions.map(question => 
+        question.id === id ? { ...question, title: newTitle } : question
+      ));
+    };
+
 
     return (
       <div className="app-container">
@@ -112,7 +127,7 @@ interface QuestionData {
           
           <div className='sur-test'>
             {questions.map((question, index) => (
-              <div className='survey-container-detail' key={index}>
+              <div className='survey-container-detail' key={question.id}>
               <Question
                 questionTitle={question.title}
                 questionType={question.type}
@@ -124,6 +139,7 @@ interface QuestionData {
                   setQuestions(updatedQuestions);
                 }}
                 onDelete={() => deleteQuestion(index)} // 삭제 이벤트 핸들러 추가
+                onUpdateTitle={(newTitle) => updateQuestionTitle(question.id, newTitle)}
               />
               </div>
             ))}

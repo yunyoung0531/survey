@@ -8,12 +8,6 @@ import { faCopy } from '@fortawesome/free-regular-svg-icons';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import './App.css';
-// import { ShortAnswer } from './ShortAnswer';
-// import { LongAnswer } from './LongAnswer';
-// import { MultipleChoice } from './MultipleChoice';
-// import { Checkbox } from './Checkbox';
-// import { DropdownQuestion } from './DropdownQuestion';
-
 
 interface QuestionProps {
     questionTitle: string;
@@ -21,15 +15,21 @@ interface QuestionProps {
     onDuplicate: () => void;
     onQuestionTypeChange: (type: string) => void;
     onDelete: () => void; // 삭제 이벤트 핸들러
+    onUpdateTitle: (newTitle: string) => void;
 }
 
-const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDuplicate, onQuestionTypeChange, onDelete }) => {
+const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDuplicate, onQuestionTypeChange, onDelete, onUpdateTitle }) => {
     // const [questionType, setQuestionType] = useState<string>('객관식 질문');
 
     const handleQuestionTypeChange = (newType: string) => {
         onQuestionTypeChange(newType); // 상위 컴포넌트에서 전달받은 핸들러를 호출
     };
-
+    const [editTitle, setEditTitle] = useState(questionTitle); // state로 제목 관리
+    // 제목이 변경될 때 호출될 핸들러
+    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEditTitle(e.target.value); // state 업데이트
+        onUpdateTitle(e.target.value); // 상위 컴포넌트에 변경 사항 전달
+    };
     const renderQuestionContent = () => {
         switch (questionType) {
             case '단답형ㅤㅤ':
@@ -57,18 +57,21 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                     </label>
                     <label className="option">
                         <input type="radio" name="option" value="option2" />
-                        <span>옵션 추가 또는 기타 추가</span>
+                        <span className='plus-option'>옵션 추가</span>
+                        <span> 또는</span>
+                        <span className='plus-etc'> '기타' 추가</span>
                     </label>
                 </>);
             case '드롭다운ㅤ':
                 return (<>
                     <label className="option">
-                        <input type="radio" name="option" value="option1" />
-                        <span>옵션 1</span>
+                        {/* <input type="radio" name="option" value="option1" /> */}
+                        <span>1 옵션 1</span>
                     </label>
                     <label className="option">
-                        <input type="radio" name="option" value="option2" />
-                        <span>옵션 추가</span>
+                        {/* <input type="radio" name="option" value="option2" /> */}
+                        <span className=''>2 </span>
+                        <span className='plus-option'> 옵션 추가</span>
                     </label>
                 </>);
             default:
@@ -86,7 +89,13 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
         <div className='question-title-container'>
         {/* <div className="question-title"> */}
             <div className="question-text">
-            <h4>{questionTitle}</h4>
+            <input
+                type="text"
+                value={editTitle}
+                onChange={handleTitleChange}
+                className="question-title-input" // 적절한 스타일을 적용하기 위한 CSS 클래스
+                placeholder="질문 제목 입력"
+            />
             </div>
             <span className='icon-outside'>
             
