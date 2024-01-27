@@ -11,7 +11,8 @@ import React, { useState } from 'react';
   import TitleAndDescription from './TitleAndDescription';
   import QuestionTypeDropdown from './QuestionTypeDropdown';
   import Question from './Question';
-
+  import { DndProvider } from 'react-dnd';
+  import { HTML5Backend } from 'react-dnd-html5-backend';
 
   // 각 질문의 제목과 유형을 저장하기 위한 새로운 인터페이스
 interface QuestionData {
@@ -118,6 +119,15 @@ interface QuestionData {
       }));
     };
     
+    const moveQuestion = (dragIndex: number, hoverIndex: number) => {
+      const dragQuestion = questions[dragIndex];
+      const updatedQuestions = [...questions];
+      // 드래그된 질문을 제거
+      updatedQuestions.splice(dragIndex, 1);
+      // 새 위치에 드래그된 질문을 삽입
+      updatedQuestions.splice(hoverIndex, 0, dragQuestion);
+      setQuestions(updatedQuestions);
+    };
     
 
     return (
@@ -148,10 +158,14 @@ interface QuestionData {
 
         <div className='content-container' >
           
+        <DndProvider backend={HTML5Backend}>
           <div className='sur-test'>
             {questions.map((question, index) => (
               <div className='survey-container-detail' key={question.id}>
               <Question
+                key={question.id} // 질문의 고유 ID를 key로 사용
+                id={question.id} // 질문의 고유 ID
+                index={index} // 현재 질문의 인덱스
                 questionTitle={question.title}
                 questionType={question.type}
                 onDuplicate={() => duplicateQuestion(index)}
@@ -165,17 +179,19 @@ interface QuestionData {
                 onUpdateTitle={(newTitle) => updateQuestionTitle(question.id, newTitle)}
                 options={question.options}
                 onAddOption={(newOption) => addOptionToQuestion(question.id, newOption)} // 여기에 question.type을 전달합니다.
+                onMove={moveQuestion} // 질문 순서를 변경하는 함수
               />
               </div>
             ))}
           </div>
+          </DndProvider>
 
             <div className='new-container'>
               <FontAwesomeIcon
                 className='new-container-icon'
                 icon={faCirclePlus}
                 size="lg"
-                onClick={addNewQuestion} // 버튼 클릭 시 addNewQuestion 함수 호출
+                onClick={addNewQuestion}
               />
               <FontAwesomeIcon className='new-container-icon' icon={faFileImport} size="lg" />
               <FontAwesomeIcon className='new-container-icon' icon={faT} size="lg" />

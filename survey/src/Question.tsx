@@ -8,6 +8,7 @@ import { faCopy } from '@fortawesome/free-regular-svg-icons';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import './App.css';
+import { useDrag, useDrop } from 'react-dnd';
 
 interface QuestionProps {
     questionTitle: string;
@@ -18,9 +19,13 @@ interface QuestionProps {
     onUpdateTitle: (newTitle: string) => void;
     options: string[]; // 새로 추가한 옵션 목록
     onAddOption: (option: string, type: string) => void; // 두 번째 인수로 type 추가
+
+    id: string; // 질문의 고유 ID 추가
+    onMove: (dragIndex: number, hoverIndex: number) => void; // 질문 순서 변경 핸들러
+    index: number; // 질문의 현재 인덱스
 }
 
-const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDuplicate, onQuestionTypeChange, onDelete, onUpdateTitle, options, onAddOption }) => {
+const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDuplicate, onQuestionTypeChange, onDelete, onUpdateTitle, options, onAddOption, id, index, onMove }) => {
     // const [questionType, setQuestionType] = useState<string>('객관식 질문');
 
     const handleQuestionTypeChange = (newType: string) => {
@@ -113,9 +118,26 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
             }
     };
 
+    const [, drag] = useDrag({
+        type: 'question',
+        item: { id, index },
+    });
+    
+    const [, drop] = useDrop({
+        accept: 'question',
+        hover(item: { id: string; index: number }) {
+            if (item.index !== index) {
+                onMove(item.index, index);
+                item.index = index; // 드래그하는 항목의 새 인덱스로 업데이트
+            }
+        },
+    });
+    
+      // 드래그 핸들에 `drag` ref 연결
+      // 드롭 타겟에 `drop` ref 연결
     return (
-    <div className="survey-question">
-        <div className='drag-drop'>
+    <div ref={drop} className="survey-question">
+        <div ref={drag} className='drag-drop'>
         <FontAwesomeIcon icon={faEllipsis}/>
         </div>  
         <div className='question-title-container'>
