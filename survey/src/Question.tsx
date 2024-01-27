@@ -7,6 +7,8 @@ import { Form } from 'react-bootstrap';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { faGrip } from '@fortawesome/free-solid-svg-icons';
+import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
 import './App.css';
 import { useDrag, useDrop } from 'react-dnd';
 
@@ -56,11 +58,13 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
             case '객관식 질문': 
                 return (<>
                     <label className="option">
+                    <FontAwesomeIcon icon={faGripVertical} style={{color: "#9c9c9c", marginRight: '10px', cursor: 'pointer'}} size='sm' />
                     <input type="radio" name="option" />
                     <span>옵션 1</span>
                     </label>
                     {options.map((option, index) => (
                         <label className="option" key={index}>
+                            <FontAwesomeIcon icon={faGripVertical} style={{color: "#9c9c9c", marginRight: '10px', cursor: 'pointer'}} size='sm' />
                             <input type="radio" name="option" value={option} />
                             <span>{option}</span>
                         </label>
@@ -79,11 +83,13 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
             case '체크박스ㅤ':
                 return (<>
                     <label className="option">
+                    <FontAwesomeIcon icon={faGripVertical} style={{color: "#9c9c9c", marginRight: '10px', cursor: 'pointer'}} size='sm' />
                     <input type="checkbox" name="option" />
                     <span>옵션 1</span>
                     </label>
                     {options.map((option, index) => (
                         <label className="option" key={index}>
+                            <FontAwesomeIcon icon={faGripVertical} style={{color: "#9c9c9c", marginRight: '10px', cursor: 'pointer'}} size='sm' />
                             <input type="checkbox" name="option" value={option} />
                             <span>{option}</span>
                         </label>
@@ -98,10 +104,12 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
             case '드롭다운ㅤ':
                 return (<>
                     <label className="option">
+                    <FontAwesomeIcon icon={faGripVertical} style={{color: "#9c9c9c", marginRight: '10px', cursor: 'pointer'}} size='sm' />
                         <span>1 옵션 1</span>
                     </label>
                     {options.map((option, index) => (
                         <label className="option" key={index}>
+                            <FontAwesomeIcon icon={faGripVertical} style={{color: "#9c9c9c", marginRight: '10px', cursor: 'pointer'}} size='sm' />
                             {/* <input type="checkbox" name="option" value={option} /> */}
                             <span>{index+2} {option}</span>
                         </label>
@@ -138,7 +146,8 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
     return (
     <div ref={drop} className="survey-question">
         <div ref={drag} className='drag-drop'>
-        <FontAwesomeIcon icon={faEllipsis}/>
+        {/* <FontAwesomeIcon icon={faEllipsis}/> */}
+        <FontAwesomeIcon icon={faGrip} style={{color: "#9c9c9c",}} size='sm' />
         </div>  
         <div className='question-title-container'>
         {/* <div className="question-title"> */}
@@ -147,7 +156,7 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                 type="text"
                 value={editTitle}
                 onChange={handleTitleChange}
-                className="question-title-input" // 적절한 스타일을 적용하기 위한 CSS 클래스
+                className="question-title-input"
                 placeholder="질문 제목 입력"
             />
             </div>
