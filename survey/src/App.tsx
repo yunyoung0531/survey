@@ -61,7 +61,7 @@ interface QuestionData {
     };
 
     const [questions, setQuestions] = useState<QuestionData[]>([
-      { id: '제목없는 질문', title: '제목없는 질문', type: '객관식 질문' , options: []}
+      { id: '제목없는 질문', title: '제목없는 질문', type: '객관식 질문' , options: ['옵션 1']}
     ]);
 
     // 새 질문을 추가하는 함수
@@ -71,7 +71,7 @@ interface QuestionData {
         id: newQuestionId,
         title: `새로운 질문 ${questions.length + 1}`,
         type: '객관식 질문',
-        options: []
+        options: ['옵션 1']
       };
       setQuestions([...questions, newQuestion]); // 새 질문을 상태에 추가합니다.
     };
@@ -128,6 +128,38 @@ interface QuestionData {
       updatedQuestions.splice(hoverIndex, 0, dragQuestion);
       setQuestions(updatedQuestions);
     };
+
+    const moveOption = (questionId: string, dragIndex: number, hoverIndex: number) => {
+      setQuestions(prevQuestions => {
+          const newQuestions = [...prevQuestions];
+          const questionIndex = newQuestions.findIndex(q => q.id === questionId);
+  
+          if (questionIndex >= 0) {
+              // 선택한 질문의 옵션 배열을 복사합니다.
+              const newOptions = [...newQuestions[questionIndex].options];
+  
+              // 드래그한 옵션을 배열에서 추출합니다.
+              const [draggedOption] = newOptions.splice(dragIndex, 1);
+  
+              // 새 위치에 드래그한 옵션을 삽입합니다.
+              newOptions.splice(hoverIndex, 0, draggedOption);
+  
+              // 새로운 옵션 배열로 질문을 업데이트합니다.
+              newQuestions[questionIndex] = {
+                  ...newQuestions[questionIndex],
+                  options: newOptions
+              };
+          }
+  
+          return newQuestions;
+      });
+  };
+  
+  const updateQuestionOptions = (questionId: string, newOptions: string[]) => {
+    setQuestions(questions.map(question => 
+      question.id === questionId ? { ...question, options: newOptions } : question
+    ));
+  };  
     
 
     return (
@@ -180,6 +212,8 @@ interface QuestionData {
                 options={question.options}
                 onAddOption={(newOption) => addOptionToQuestion(question.id, newOption)} // 여기에 question.type을 전달합니다.
                 onMove={moveQuestion} // 질문 순서를 변경하는 함수
+                moveOption={(dragIndex, hoverIndex) => moveOption(question.id, dragIndex, hoverIndex)}
+                onUpdateOptions={(newOptions) => updateQuestionOptions(question.id, newOptions)}
               />
               </div>
             ))}
