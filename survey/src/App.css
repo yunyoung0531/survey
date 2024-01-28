@@ -305,3 +305,8 @@
   border: none;
   outline: none;
 }
+
+.eye-icon {
+  color: #575757;
+  cursor: pointer;
+}

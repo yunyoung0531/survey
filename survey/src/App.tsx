@@ -3,11 +3,13 @@ import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-regular-svg-icons'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Nav, Navbar, Container } from 'react-bootstrap';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import { faFileImport } from '@fortawesome/free-solid-svg-icons';
 import { faEquals } from '@fortawesome/free-solid-svg-icons';
 import { faT } from '@fortawesome/free-solid-svg-icons';
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { faEye } from '@fortawesome/free-regular-svg-icons';
 import TitleAndDescription from './TitleAndDescription';
 import QuestionTypeDropdown from './QuestionTypeDropdown';
 import Question from './Question';
@@ -138,6 +140,14 @@ interface QuestionData {
 
 
     return (
+      <>
+      <Navbar className="bg-body-tertiary">
+        <Container>
+          <Navbar.Brand className='ms-auto'>
+            <FontAwesomeIcon icon={faEye}  className='eye-icon' />
+          </Navbar.Brand>
+        </Container>
+      </Navbar>
       <div className="app-container">
         <div className="survey-container">
           <div className="survey-header" style={{ position: 'relative' }}>
@@ -206,9 +216,8 @@ interface QuestionData {
 
           </div>
 
-
-
       </div>
+      </>
     );
   }
 
