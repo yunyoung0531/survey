@@ -31,7 +31,6 @@ interface QuestionProps {
 }
 
 const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDuplicate, onQuestionTypeChange, onDelete, onUpdateTitle, options, onAddOption, id, index, onMove, moveOption, onUpdateOptions }) => {
-    // const [questionType, setQuestionType] = useState<string>('객관식 질문');
 
     const handleQuestionTypeChange = (newType: string) => {
         onQuestionTypeChange(newType); // 상위 컴포넌트에서 전달받은 핸들러를 호출

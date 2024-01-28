@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
-  import './App.css';
-  import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-  import { faImage } from '@fortawesome/free-regular-svg-icons'
-  import 'bootstrap/dist/css/bootstrap.min.css';
-  import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
-  import { faFileImport } from '@fortawesome/free-solid-svg-icons';
-  import { faEquals } from '@fortawesome/free-solid-svg-icons';
-  import { faT } from '@fortawesome/free-solid-svg-icons';
-  import { faYoutube } from '@fortawesome/free-brands-svg-icons';
-  import TitleAndDescription from './TitleAndDescription';
-  import QuestionTypeDropdown from './QuestionTypeDropdown';
-  import Question from './Question';
-  import { DndProvider } from 'react-dnd';
-  import { HTML5Backend } from 'react-dnd-html5-backend';
+import './App.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faImage } from '@fortawesome/free-regular-svg-icons'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import { faFileImport } from '@fortawesome/free-solid-svg-icons';
+import { faEquals } from '@fortawesome/free-solid-svg-icons';
+import { faT } from '@fortawesome/free-solid-svg-icons';
+import { faYoutube } from '@fortawesome/free-brands-svg-icons';
+import TitleAndDescription from './TitleAndDescription';
+import QuestionTypeDropdown from './QuestionTypeDropdown';
+import Question from './Question';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from './store'; // RootState는 전체 애플리케이션 상태의 타입입니다.
+
+import { addQuestion, deleteQuestion, updateQuestion, changeQuestionType, addOptionToQuestion, moveQuestion, moveOption, updateQuestionOptions } from './store/questionsSlice';
 
   // 각 질문의 제목과 유형을 저장하기 위한 새로운 인터페이스
 interface QuestionData {
@@ -22,12 +26,59 @@ interface QuestionData {
   options: string[];
 }
 
-
   const App: React.FC = () => {
     const [isTitleEditing, setIsTitleEditing] = useState<boolean>(false);
     const [isDescriptionEditing, setIsDescriptionEditing] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('제목 없는 설문지');
     const [description, setDescription] = useState<string>('설문지 설명');
+
+    const questionsFromRedux = useSelector((state: RootState) => state.questions.questions);
+    const dispatch = useDispatch();
+
+    // 새 질문을 추가하는 함수
+  const handleAddNewQuestion = () => {
+    const newQuestionId = `question-${questionsFromRedux.length + 1}`;
+    const newQuestion: QuestionData = {
+      id: newQuestionId,
+      title: `새로운 질문 ${questionsFromRedux.length + 1}`,
+      type: '객관식 질문',
+      options: ['옵션 1']
+    };
+    // 액션을 디스패치하여 새 질문을 추가합니다.
+    dispatch(addQuestion(newQuestion));
+  };
+
+  // 질문을 복제하는 함수
+  const handleDuplicateQuestion = (index: number) => {
+    const questionToCopy = questionsFromRedux[index];
+    // 복제할 질문의 데이터를 변경하고 새 ID를 할당합니다.
+    const duplicatedQuestion = {
+      ...questionToCopy,
+      id: `question-${questionsFromRedux.length + 1}`
+    };
+    // 액션을 디스패치하여 질문을 복제합니다.
+    dispatch(addQuestion(duplicatedQuestion));
+  };
+
+  // 질문을 삭제하는 함수
+  const handleDeleteQuestion = (id: string) => {
+    // 액션을 디스패치하여 질문을 삭제합니다.
+    dispatch(deleteQuestion(id));
+  };
+
+  // 질문 제목을 업데이트하는 함수
+  const handleUpdateQuestionTitle = (id: string, newTitle: string) => {
+    // 업데이트할 질문의 새 데이터를 생성합니다.
+    const updatedQuestion = {
+      id,
+      title: newTitle,
+      // type과 options은 현재 질문의 데이터를 유지합니다.
+      type: questionsFromRedux.find(questionsFromRedux => questionsFromRedux.id === id)?.type || '',
+      options: questionsFromRedux.find(questionsFromRedux => questionsFromRedux.id === id)?.options || []
+    };
+    // 액션을 디스패치하여 질문 제목을 업데이트합니다.
+    dispatch(updateQuestion(updatedQuestion));
+  };
 
     const handleTitleClick = () => {
       setIsTitleEditing(true);
@@ -53,114 +104,38 @@ interface QuestionData {
       setIsDescriptionEditing(false);
     };
 
-
-    const [questionType, setQuestionType] = useState<string>('객관식 질문');
-    // 질문 유형 변경 핸들러
-    const handleQuestionTypeChange = (type: string) => {
-      setQuestionType(type);
+    //질문 유형을 변경하는 함수
+    const handleChangeQuestionType = (id: string, newType: string) => {
+      dispatch(changeQuestionType({ id, newType }));
     };
 
-    const [questions, setQuestions] = useState<QuestionData[]>([
-      { id: '제목없는 질문', title: '제목없는 질문', type: '객관식 질문' , options: ['옵션 1']}
-    ]);
+    // 질문에 옵션을 추가하는 함수
+    const handleAddOptionToQuestion = (questionId: string, newOption: string) => {
+      dispatch(addOptionToQuestion({ questionId, newOption }));
+    };
 
-    // 새 질문을 추가하는 함수
-    const addNewQuestion = () => {
-      const newQuestionId = `question-${questions.length + 1}`;
-      const newQuestion: QuestionData = {
-        id: newQuestionId,
-        title: `새로운 질문 ${questions.length + 1}`,
-        type: '객관식 질문',
-        options: ['옵션 1']
-      };
-      setQuestions([...questions, newQuestion]); // 새 질문을 상태에 추가합니다.
+    // const [questionType, setQuestionType] = useState<string>('객관식 질문');
+    // // 질문 유형 변경 핸들러
+    // const handleQuestionTypeChange = (type: string) => {
+    //   setQuestionType(type);
+    // };
+
+    // 질문 순서를 변경하는 함수
+    const handleMoveQuestion = (dragIndex: number, hoverIndex: number) => {
+      dispatch(moveQuestion({ dragIndex, hoverIndex }));
+    };
+
+    // 옵션을 이동하는 함수
+    const handleMoveOption = (questionId: string, dragIndex: number, hoverIndex: number) => {
+      dispatch(moveOption({ questionId, dragIndex, hoverIndex }));
+    };
+
+    // 옵션을 업데이트하는 함수
+    const handleUpdateQuestionOptions = (questionId: string, newOptions: string[]) => {
+      dispatch(updateQuestionOptions({ questionId, newOptions }));
     };
 
 
-      // 질문을 복제하는 함수
-    const duplicateQuestion = (index: number) => {
-        // 현재 질문을 복제하고 배열에 추가
-        const newQuestions = [...questions];
-        const questionToCopy = { ...newQuestions[index] };
-        newQuestions.splice(index + 1, 0, questionToCopy);
-        setQuestions(newQuestions);
-    };
-
-    //삭제 기능 
-    const deleteQuestion = (index: number) => {
-      setQuestions(questions.filter((_, questionIndex) => questionIndex !== index));
-    };
-  
-    // 질문의 제목을 업데이트하는 함수
-    const updateQuestionTitle = (id: string, newTitle: string) => {
-      setQuestions(questions.map(question => 
-        question.id === id ? { ...question, title: newTitle } : question
-      ));
-    };
-
-    const addOptionToQuestion = (questionId: string, newOption: string) => {
-      setQuestions(questions.map(question => {
-        if (question.id === questionId) {
-          // 여기서 question.type을 사용합니다.
-          switch (question.type) {
-            case '객관식 질문':
-              return { ...question, options: [...question.options, newOption] };
-            case '체크박스ㅤ':
-              // 체크박스 옵션 추가 로직
-              return { ...question, options: [...question.options, newOption] };
-            case '드롭다운ㅤ':
-              // 드롭다운 옵션 추가 로직
-              return { ...question, options: [...question.options, newOption] };
-            default:
-              return question;
-          }
-        }
-        return question;
-      }));
-    };
-    
-    const moveQuestion = (dragIndex: number, hoverIndex: number) => {
-      const dragQuestion = questions[dragIndex];
-      const updatedQuestions = [...questions];
-      // 드래그된 질문을 제거
-      updatedQuestions.splice(dragIndex, 1);
-      // 새 위치에 드래그된 질문을 삽입
-      updatedQuestions.splice(hoverIndex, 0, dragQuestion);
-      setQuestions(updatedQuestions);
-    };
-
-    const moveOption = (questionId: string, dragIndex: number, hoverIndex: number) => {
-      setQuestions(prevQuestions => {
-          const newQuestions = [...prevQuestions];
-          const questionIndex = newQuestions.findIndex(q => q.id === questionId);
-  
-          if (questionIndex >= 0) {
-              // 선택한 질문의 옵션 배열을 복사합니다.
-              const newOptions = [...newQuestions[questionIndex].options];
-  
-              // 드래그한 옵션을 배열에서 추출합니다.
-              const [draggedOption] = newOptions.splice(dragIndex, 1);
-  
-              // 새 위치에 드래그한 옵션을 삽입합니다.
-              newOptions.splice(hoverIndex, 0, draggedOption);
-  
-              // 새로운 옵션 배열로 질문을 업데이트합니다.
-              newQuestions[questionIndex] = {
-                  ...newQuestions[questionIndex],
-                  options: newOptions
-              };
-          }
-  
-          return newQuestions;
-      });
-  };
-  
-  const updateQuestionOptions = (questionId: string, newOptions: string[]) => {
-    setQuestions(questions.map(question => 
-      question.id === questionId ? { ...question, options: newOptions } : question
-    ));
-  };  
-    
 
     return (
       <div className="app-container">
@@ -192,7 +167,7 @@ interface QuestionData {
           
         <DndProvider backend={HTML5Backend}>
           <div className='sur-test'>
-            {questions.map((question, index) => (
+            {questionsFromRedux.map((question, index) => (
               <div className='survey-container-detail' key={question.id}>
               <Question
                 key={question.id} // 질문의 고유 ID를 key로 사용
@@ -200,20 +175,15 @@ interface QuestionData {
                 index={index} // 현재 질문의 인덱스
                 questionTitle={question.title}
                 questionType={question.type}
-                onDuplicate={() => duplicateQuestion(index)}
-                onQuestionTypeChange={(newType) => {
-                  // 질문 유형을 변경하는 새 함수
-                  const updatedQuestions = [...questions];
-                  updatedQuestions[index] = { ...updatedQuestions[index], type: newType };
-                  setQuestions(updatedQuestions);
-                }}
-                onDelete={() => deleteQuestion(index)}
-                onUpdateTitle={(newTitle) => updateQuestionTitle(question.id, newTitle)}
+                onDuplicate={() => handleDuplicateQuestion(index)}
+                onQuestionTypeChange={(newType) => handleChangeQuestionType(question.id, newType)}
+                onDelete={() => handleDeleteQuestion(question.id)}
+                onUpdateTitle={(newTitle) => handleUpdateQuestionTitle(question.id, newTitle)}
                 options={question.options}
-                onAddOption={(newOption) => addOptionToQuestion(question.id, newOption)} // 여기에 question.type을 전달합니다.
-                onMove={moveQuestion} // 질문 순서를 변경하는 함수
-                moveOption={(dragIndex, hoverIndex) => moveOption(question.id, dragIndex, hoverIndex)}
-                onUpdateOptions={(newOptions) => updateQuestionOptions(question.id, newOptions)}
+                onAddOption={(newOption) => handleAddOptionToQuestion(question.id, newOption)}
+                onMove={(dragIndex, hoverIndex) => handleMoveQuestion(dragIndex, hoverIndex)}
+                moveOption={(dragIndex, hoverIndex) => handleMoveOption(question.id, dragIndex, hoverIndex)}
+                onUpdateOptions={(newOptions) => handleUpdateQuestionOptions(question.id, newOptions)}
               />
               </div>
             ))}
@@ -225,8 +195,8 @@ interface QuestionData {
                 className='new-container-icon'
                 icon={faCirclePlus}
                 size="lg"
-                onClick={addNewQuestion}
-              />
+                onClick={handleAddNewQuestion}
+                />
               <FontAwesomeIcon className='new-container-icon' icon={faFileImport} size="lg" />
               <FontAwesomeIcon className='new-container-icon' icon={faT} size="lg" />
               <FontAwesomeIcon className='new-container-icon' icon={faImage} size="lg" />

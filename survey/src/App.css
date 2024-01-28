@@ -298,4 +298,10 @@
 
 .plus-etc {
   color: #1A73E8;
+  cursor: pointer;
+}
+
+.option-edit:focus {
+  border: none;
+  outline: none;
 }
