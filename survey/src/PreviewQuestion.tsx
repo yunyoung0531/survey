@@ -96,7 +96,14 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
                         />
                     </div>;
             case '장문형ㅤㅤ':
-                return <div className="custom-input-long-preview">장문형 텍스트</div>;
+                return <div className="custom-input-long-preview">
+                        <input
+                        type="text"
+                        placeholder="장문형 텍스트"
+                        // onChange={handleTitleChange} 
+                        className='long-input-pre'
+                        />
+                </div>;
             case '객관식 질문': 
                 return (<>
                     {options.map((option, index) => (

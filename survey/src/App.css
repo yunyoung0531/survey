@@ -333,6 +333,13 @@
   border: none;
   outline: none;
 }
+.long-input-pre {
+  border: none;
+}
+.long-input-pre:focus {
+  border: none;
+  outline: none;
+}
 .custom-input-long {
   border: none; 
   border-bottom: 0.1px dashed #b6b6b6; /* 점선 밑줄 추가 */
@@ -346,7 +353,7 @@
 .custom-input-long-preview {
   border: none; 
   border-bottom: 0.1px dashed #b6b6b6; /* 점선 밑줄 추가 */
-  width: 85%;
+  width: 97.3%;
   outline: none;
   margin-bottom: 50px;
   font-size: 14px;
