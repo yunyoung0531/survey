@@ -60,8 +60,17 @@
   border-left: 7px solid #4285F4;
   display: flex;
   flex-direction: column;
-  /* margin-right: 16px;
-  margin-left: 65px; */
+}
+.survey-container-detail-pre {
+  width: 100%;
+  background-color: white;
+  padding-bottom: 0px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px; /* 아래쪽 모서리만 둥글게 */
+  overflow: hidden;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .survey-question {
@@ -77,7 +86,7 @@
 
 
 
-.question-text{
+.question-text {
   background-color: #f8f8f8;
   padding: 13px 10px;
   margin-right: 30px;
@@ -87,6 +96,24 @@
   border-radius: 1px;
   flex-grow: 1;
 }
+.question-text-preview {
+  /* padding: 13px 10px; */
+  margin-right: 30px;
+  font-size: 13px;
+  color: #333;
+  border-radius: 1px;
+}
+
+.question-text-preview input {
+  font-size: 16px;
+  padding: 10px;
+  display: flex;
+  border: none;
+}
+.question-text-preview input:focus {
+  border: none;
+  outline: none; 
+}
 
 .question-text input {
   font-size: 16px;
@@ -95,6 +122,7 @@
   border: none;
   background-color: #f8f8f8;
 }
+
 .question-text input:focus {
   border: none;
   outline: none; 
@@ -201,6 +229,12 @@
   margin-left: 58px;
   overflow-anchor: none;
 }
+.content-container-preview {
+  display: flex;
+  width: 70.5%;
+  justify-content: center;
+  overflow-anchor: none;
+}
 
 .sur-test {
   width: 71%;
@@ -280,7 +314,36 @@
   color: #6a6a6a;
   margin-left: 20px;
 }
+
+.custom-input-preview {
+  border: none; 
+  border-bottom: 0.1px dashed #b6b6b6; /* 점선 밑줄 추가 */
+  width: 47%; /* 전체 너비 사용 */
+  outline: none;
+  margin-bottom: 50px;
+  font-size: 14px;
+  color: #6a6a6a;
+  margin-left: 20px;
+}
+
+.short-input-pre {
+  border: none;
+}
+.short-input-pre:focus {
+  border: none;
+  outline: none;
+}
 .custom-input-long {
+  border: none; 
+  border-bottom: 0.1px dashed #b6b6b6; /* 점선 밑줄 추가 */
+  width: 85%;
+  outline: none;
+  margin-bottom: 50px;
+  font-size: 14px;
+  color: #6a6a6a;
+  margin-left: 20px;
+}
+.custom-input-long-preview {
   border: none; 
   border-bottom: 0.1px dashed #b6b6b6; /* 점선 밑줄 추가 */
   width: 85%;

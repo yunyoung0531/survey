@@ -3,7 +3,6 @@ import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-regular-svg-icons'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Nav, Navbar, Container } from 'react-bootstrap';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import { faFileImport } from '@fortawesome/free-solid-svg-icons';
 import { faEquals } from '@fortawesome/free-solid-svg-icons';
@@ -17,9 +16,12 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from './store'; // RootState는 전체 애플리케이션 상태의 타입입니다.
-
 import { addQuestion, deleteQuestion, updateQuestion, changeQuestionType, addOptionToQuestion, moveQuestion, moveOption, updateQuestionOptions } from './store/questionsSlice';
-
+// import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Preview from './Preview';
+import { useNavigate } from 'react-router-dom';
+import NavBar from './NavBar';
   // 각 질문의 제목과 유형을 저장하기 위한 새로운 인터페이스
 interface QuestionData {
   id: string;
@@ -29,6 +31,12 @@ interface QuestionData {
 }
 
   const App: React.FC = () => {
+    const [userInputTitle, setUserInputTitle] = useState(""); // 질문 제목 상태 관리
+
+      const handleUserInputTitleChange = (newTitle: string) => {
+        setUserInputTitle(newTitle); // 사용자 입력에 따라 제목 상태 업데이트
+      };  
+    
     const [isTitleEditing, setIsTitleEditing] = useState<boolean>(false);
     const [isDescriptionEditing, setIsDescriptionEditing] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('제목 없는 설문지');
@@ -36,7 +44,7 @@ interface QuestionData {
 
     const questionsFromRedux = useSelector((state: RootState) => state.questions.questions);
     const dispatch = useDispatch();
-
+    let navigate = useNavigate();
     // 새 질문을 추가하는 함수
   const handleAddNewQuestion = () => {
     const newQuestionId = `question-${questionsFromRedux.length + 1}`;
@@ -140,84 +148,85 @@ interface QuestionData {
 
 
     return (
-      <>
-      <Navbar className="bg-body-tertiary">
-        <Container>
-          <Navbar.Brand className='ms-auto'>
-            <FontAwesomeIcon icon={faEye}  className='eye-icon' />
-          </Navbar.Brand>
-        </Container>
-      </Navbar>
-      <div className="app-container">
-        <div className="survey-container">
-          <div className="survey-header" style={{ position: 'relative' }}>
-          <TitleAndDescription
-              isEditing={isTitleEditing}
-              value={title}
-              onBlur={handleTitleBlur}
-              onChange={handleTitleChange}
-              onClick={handleTitleClick}
-              className='title-editing-input'
-              type='title'
-            />
-            <TitleAndDescription
-              isEditing={isDescriptionEditing}
-              value={description}
-              onBlur={handleDescriptionBlur}
-              onChange={handleDescriptionChange}
-              onClick={handleDescriptionClick}
-              className='description-editing-input'
-              type='description'
-            />
-          </div>
-        </div>
-        
+          <Routes>
+            <Route path="/" element={<>
+              <NavBar title={title} description={description} userInputTitle={userInputTitle} />
+              <div className="app-container">
+                <div className="survey-container">
+                  <div className="survey-header" style={{ position: 'relative' }}>
+                  <TitleAndDescription
+                      isEditing={isTitleEditing}
+                      value={title}
+                      onBlur={handleTitleBlur}
+                      onChange={handleTitleChange}
+                      onClick={handleTitleClick}
+                      className='title-editing-input'
+                      type='title'
+                    />
+                    <TitleAndDescription
+                      isEditing={isDescriptionEditing}
+                      value={description}
+                      onBlur={handleDescriptionBlur}
+                      onChange={handleDescriptionChange}
+                      onClick={handleDescriptionClick}
+                      className='description-editing-input'
+                      type='description'
+                    />
+                  </div>
+                </div>
+                
 
-        <div className='content-container' >
-          
-        <DndProvider backend={HTML5Backend}>
-          <div className='sur-test'>
-            {questionsFromRedux.map((question, index) => (
-              <div className='survey-container-detail' key={question.id}>
-              <Question
-                key={question.id} // 질문의 고유 ID를 key로 사용
-                id={question.id} // 질문의 고유 ID
-                index={index} // 현재 질문의 인덱스
-                questionTitle={question.title}
-                questionType={question.type}
-                onDuplicate={() => handleDuplicateQuestion(index)}
-                onQuestionTypeChange={(newType) => handleChangeQuestionType(question.id, newType)}
-                onDelete={() => handleDeleteQuestion(question.id)}
-                onUpdateTitle={(newTitle) => handleUpdateQuestionTitle(question.id, newTitle)}
-                options={question.options}
-                onAddOption={(newOption) => handleAddOptionToQuestion(question.id, newOption)}
-                onMove={(dragIndex, hoverIndex) => handleMoveQuestion(dragIndex, hoverIndex)}
-                moveOption={(dragIndex, hoverIndex) => handleMoveOption(question.id, dragIndex, hoverIndex)}
-                onUpdateOptions={(newOptions) => handleUpdateQuestionOptions(question.id, newOptions)}
-              />
-              </div>
-            ))}
-          </div>
-          </DndProvider>
+                <div className='content-container' >
+                  
+                <DndProvider backend={HTML5Backend}>
+                  <div className='sur-test'>
+                    {questionsFromRedux.map((question, index) => (
+                      <div className='survey-container-detail' key={question.id}>
+                      <Question
+                        key={question.id} // 질문의 고유 ID를 key로 사용
+                        id={question.id} // 질문의 고유 ID
+                        index={index} // 현재 질문의 인덱스
+                        questionTitle={question.title}
+                        questionType={question.type}
+                        onDuplicate={() => handleDuplicateQuestion(index)}
+                        onQuestionTypeChange={(newType) => handleChangeQuestionType(question.id, newType)}
+                        onDelete={() => handleDeleteQuestion(question.id)}
+                        onUpdateTitle={(newTitle) => handleUpdateQuestionTitle(question.id, newTitle)}
+                        options={question.options}
+                        onAddOption={(newOption) => handleAddOptionToQuestion(question.id, newOption)}
+                        onMove={(dragIndex, hoverIndex) => handleMoveQuestion(dragIndex, hoverIndex)}
+                        moveOption={(dragIndex, hoverIndex) => handleMoveOption(question.id, dragIndex, hoverIndex)}
+                        onUpdateOptions={(newOptions) => handleUpdateQuestionOptions(question.id, newOptions)}
+                        userInputTitle={userInputTitle}
+                        onUpdateUserInputTitle={handleUserInputTitleChange}
+                      />
+                      </div>
+                    ))}
+                  </div>
+                  </DndProvider>
 
-            <div className='new-container'>
-              <FontAwesomeIcon
-                className='new-container-icon'
-                icon={faCirclePlus}
-                size="lg"
-                onClick={handleAddNewQuestion}
-                />
-              <FontAwesomeIcon className='new-container-icon' icon={faFileImport} size="lg" />
-              <FontAwesomeIcon className='new-container-icon' icon={faT} size="lg" />
-              <FontAwesomeIcon className='new-container-icon' icon={faImage} size="lg" />
-              <FontAwesomeIcon className='new-container-icon' icon={faYoutube} size="lg" />
-              <FontAwesomeIcon className='new-container-icon' icon={faEquals} size="lg" />
-            </div>
+                    <div className='new-container'>
+                      <FontAwesomeIcon
+                        className='new-container-icon'
+                        icon={faCirclePlus}
+                        size="lg"
+                        onClick={handleAddNewQuestion}
+                        />
+                      <FontAwesomeIcon className='new-container-icon' icon={faFileImport} size="lg" />
+                      <FontAwesomeIcon className='new-container-icon' icon={faT} size="lg" />
+                      <FontAwesomeIcon className='new-container-icon' icon={faImage} size="lg" />
+                      <FontAwesomeIcon className='new-container-icon' icon={faYoutube} size="lg" />
+                      <FontAwesomeIcon className='new-container-icon' icon={faEquals} size="lg" />
+                    </div>
 
-          </div>
+                  </div>
+                </div>
+            </>}/>
 
-      </div>
-      </>
+              <Route path="/preview" element={<>
+                <Preview title={title} description={description}/>
+              </>} />
+          </Routes>
     );
   }
 

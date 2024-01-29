@@ -8,7 +8,7 @@ import { faCopy } from '@fortawesome/free-regular-svg-icons';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { faGrip } from '@fortawesome/free-solid-svg-icons';
-import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
+// import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
 import './App.css';
 import { useDrag, useDrop } from 'react-dnd';
 import Option from './Option';
@@ -29,12 +29,9 @@ interface QuestionProps {
     moveOption?: (dragIndex: number, hoverIndex: number) => void; // moveOption 함수 추가
     onUpdateOptions?: (newOptions: string[]) => void; // 옵션을 업데이트하는 콜백
     onUserResponse?: (response: string) => void;  // 옵셔널로 변경
-
-    userInputTitle: string;
-    onUpdateUserInputTitle: (newTitle: string) => void;
 }
 
-const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDuplicate, onQuestionTypeChange, onDelete, onUpdateTitle, options, onAddOption, id, index, onMove, moveOption, onUpdateOptions, onUserResponse }) => {
+const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType, onDuplicate, onQuestionTypeChange, onDelete, onUpdateTitle, options, onAddOption, id, index, onMove, moveOption, onUpdateOptions, onUserResponse }) => {
     // 사용자 응답 핸들링 예시
     // const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //     onUserResponse(event.target.value);
@@ -49,10 +46,10 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
     };
     const [editTitle, setEditTitle] = useState(questionTitle); // state로 제목 관리
     // 제목이 변경될 때 호출될 핸들러
-    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEditTitle(e.target.value); // state 업데이트
-        onUpdateTitle?.(e.target.value); // 상위 컴포넌트에 변경 사항 전달
-    };
+    // const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     setEditTitle(e.target.value); // state 업데이트
+    //     onUpdateTitle?.(e.target.value); // 상위 컴포넌트에 변경 사항 전달
+    // };
 
     const addOption = (type: string) => {
         onAddOption?.(`옵션 ${(options.length) + 1}`, type); 
@@ -76,15 +73,30 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
         setLocalOptions(updatedOptions);
         onUpdateOptions?.(updatedOptions); // 변경사항을 상위 컴포넌트로 전달
     };
+    // const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     // 입력 필드의 새로운 값으로 상태를 업데이트합니다.
+    //     setEditTitle(event.target.value);
+    //     // 상위 컴포넌트의 변경 핸들러를 호출하여 변경 사항을 전달합니다.
+    //     // 여기서 옵셔널 체이닝을 사용하여 함수가 정의되어 있을 때만 호출합니다.
+    //     onUpdateTitle?.(event.target.value);
+    // };
 
     const renderQuestionContent = () => {
         const hasOtherOption = localOptions.includes('기타');
 
         switch (questionType) {
             case '단답형ㅤㅤ':
-                return <div className="custom-input">단답형 텍스트</div>;
+                return <div className="custom-input-preview">
+                        {/* 단답형 텍스트 */}
+                        <input
+                        type="text"
+                        placeholder="단답형 텍스트"
+                        // onChange={handleTitleChange} 
+                        className='short-input-pre'
+                        />
+                    </div>;
             case '장문형ㅤㅤ':
-                return <div className="custom-input-long">장문형 텍스트</div>;
+                return <div className="custom-input-long-preview">장문형 텍스트</div>;
             case '객관식 질문': 
                 return (<>
                     {options.map((option, index) => (
@@ -92,21 +104,21 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                         onUpdateOption={updateOption}/>
                     ))}
                     <label className="option">
-                        <span className='plus-option' onClick={() => addOption('객관식 질문')}>
+                        {/* <span className='plus-option' onClick={() => addOption('객관식 질문')}>
                         옵션 추가
-                        </span>
-                        {!hasOtherOption && (
-                        <>
-                            <span> 또는</span>
-                            <span className='plus-etc' onClick={addOtherOption}> '기타' 추가</span>
-                        </>
-                        )}
+                        </span> */}
+                            {/* {!hasOtherOption && (
+                            <>
+                                <span> 또는</span>
+                                <span className='plus-etc' onClick={addOtherOption}> '기타' 추가</span>
+                            </>
+                            )} */}
                     </label>
                 </>);
             case '체크박스ㅤ':
                 return (<>
                     <label className="option">
-                    <FontAwesomeIcon icon={faGripVertical} style={{color: "#bababa", marginRight: '10px', cursor: 'pointer'}} size='sm' />
+                    {/* <FontAwesomeIcon icon={faGripVertical} style={{color: "#bababa", marginRight: '10px', cursor: 'pointer'}} size='sm' /> */}
                     <input type="checkbox" name="option" />
                     <span>옵션 1</span>
                     </label>
@@ -120,16 +132,16 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                         onUpdateOption={updateOption}/>
                     ))}
                     <label className="option">
-                        <span className='plus-option' onClick={()=>{addOption('체크박스ㅤ')}}>옵션 추가</span>
+                        {/* <span className='plus-option' onClick={()=>{addOption('체크박스ㅤ')}}>옵션 추가</span>
                         <span> 또는</span>
-                        <span className='plus-etc' onClick={()=>{addOtherOption()}}> '기타' 추가</span>
+                        <span className='plus-etc' onClick={()=>{addOtherOption()}}> '기타' 추가</span> */}
                     </label>
                 </>);
             
             case '드롭다운ㅤ':
                 return (<>
                     <label className="option" >
-                    <FontAwesomeIcon icon={faGripVertical} style={{color: "#bababa", marginRight: '10px', cursor: 'pointer'}} size='sm' />
+                    {/* <FontAwesomeIcon icon={faGripVertical} style={{color: "#bababa", marginRight: '10px', cursor: 'pointer'}} size='sm' /> */}
                         <span>1 옵션 1</span>
                     </label>
                     {options.map((option, index) => (
@@ -165,56 +177,52 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
     });
     
     return (
-    <div ref={drop} className="survey-question">
-        <div ref={drag} className='drag-drop'>
-        {/* <FontAwesomeIcon icon={faEllipsis}/> */}
-        <FontAwesomeIcon icon={faGrip} style={{color: "#b0b0b0", cursor: 'move'}} size='sm' />
-        </div>  
+    <div className="survey-question">
         <div className='question-title-container'>
         {/* <div className="question-title"> */}
-            <div className="question-text">
+            <div className="question-text-preview">
             <input
-                type="text"
+                // type="text"
                 value={editTitle}
-                onChange={handleTitleChange}
-                className="question-title-input"
-                placeholder="질문 제목 입력"
+                // onChange={handleTitleChange}
+                className="question-title-input-preview"
+                // placeholder="질문 제목 입력"
             />
             </div>
-            <span className='icon-outside'>
+            {/* <span className='icon-outside'> */}
             
-            <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer', marginTop: '-15px'}} size='lg' icon={faImage} />
-            <QuestionTypeDropdown
+            {/* <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer', marginTop: '-15px'}} size='lg' icon={faImage} /> */}
+            {/* <QuestionTypeDropdown
                 selectedType={questionType}
                 onSelectType={handleQuestionTypeChange}
-            />
-            </span>
+            /> */}
+            {/* </span> */}
         {/* </div> */}
         </div>
             <div className="question-options">
             {renderQuestionContent()}
             </div>
             <div className='question-tail'>
-                <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faCopy}
+                {/* <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faCopy}
                   onClick={() => onDuplicate && onDuplicate()} // onDuplicate이 존재하는 경우에만 호출
-                />
-                <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faTrashCan} 
-                onClick={onDelete}
-                />
+                /> */}
+                {/* <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faTrashCan} 
+                onClick={onDelete} 
+                /> */}
                 <span className='question-tail-option'>
-                ㅤ필수
+                {/* ㅤ필수
                 <Form>
                     <Form.Check 
                     type="switch"
                     id="custom-switch"
                     // label="필수"
                     />
-                </Form>
-                <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faEllipsisVertical}/>
+                </Form> */}
+                {/* <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faEllipsisVertical}/> */}
                 </span>
             </div>
     </div>
     );
 };
 
-export default Question;
+export default PreviewQuestion;

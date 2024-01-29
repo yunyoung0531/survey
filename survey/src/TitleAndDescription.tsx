@@ -2,11 +2,11 @@ import React from 'react';
 
 // Props 타입 정의
 interface TitleAndDescriptionProps {
-    isEditing: boolean;
-    value: string;
-    onBlur: () => void;
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    onClick: () => void;
+    isEditing?: boolean;
+    value?: string;
+    onBlur?: () => void;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onClick?: () => void;
     className: string;
     type: 'title' | 'description';
 }
