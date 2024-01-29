@@ -35,7 +35,7 @@ const Preview: React.FC<PreviewProps> = ({ title, description }) => {
     let navigate = useNavigate();
     const handleSubmit = () => {
         // 'responses' 상태를 'Result' 페이지로 전달
-        navigate('/result', { state: { responses, questions: questionsFromRedux } });
+        navigate('/result', { state: { title, description, responses, questions: questionsFromRedux } });
     };
     
     const [responses, setResponses] = useState<Responses>({});
