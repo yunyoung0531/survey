@@ -11,7 +11,7 @@ import { faGrip } from '@fortawesome/free-solid-svg-icons';
 // import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
 import './App.css';
 import { useDrag, useDrop } from 'react-dnd';
-import Option from './Option';
+import PreviewOption from './PreviewOption';
 // import { Dropdown, DropdownButton } from 'react-bootstrap';
 
 interface QuestionProps {   
@@ -108,8 +108,7 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
             case '객관식 질문': 
                 return (<>
                     {options.map((option, index) => (
-                        <Option key={index} option={option} index={index} questionType={questionType}   moveOption={moveOption || (() => {})} // moveOption이 undefined일 경우 빈 함수 제공
-                        onUpdateOption={updateOption}/>
+                        <PreviewOption key={index} option={option} index={index} questionType={questionType} />
                     ))}
                     <label className="option">
                         {/* <span className='plus-option' onClick={() => addOption('객관식 질문')}>
@@ -135,8 +134,8 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
                         //     <input type="checkbox" name="option" value={option} />
                         //     <span>{option}</span>
                         // </label>
-                        <Option key={index} option={option} index={index} questionType={questionType}   moveOption={moveOption || (() => {})} // moveOption이 undefined일 경우 빈 함수 제공
-                        onUpdateOption={updateOption}/>
+                        <PreviewOption key={index} option={option} index={index} questionType={questionType}
+                        />
                     ))}
                     <label className="option">
                         {/* <span className='plus-option' onClick={()=>{addOption('체크박스ㅤ')}}>옵션 추가</span>
@@ -147,16 +146,19 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
             
             case '드롭다운ㅤ':
                 return (<>
-                    {/* <label className="option" >
-                        <span>1 옵션 1</span>
-                    </label> */}
-                    {options.map((option, index) => (
-                        <Option key={index} option={option} index={index} questionType={questionType}   moveOption={moveOption || (() => {})} // moveOption이 undefined일 경우 빈 함수 제공
-                        onUpdateOption={updateOption} />
+                    
+                    {/* {options.map((option, index) => (
+                        <PreviewOption key={index} option={option} index={index} options={options} questionType={questionType}
+                        />
+                    ))} */}
+                    <select className="form-control">
+                    {localOptions.map((option, idx) => (
+                        <option key={idx} value={option}>
+                            {option}
+                        </option>
                     ))}
+                    </select>
                     <label className="option">
-                        {/* <span className='plus-option' onClick={()=>{addOption('드롭다운ㅤ')}}>옵션 추가</span> */}
-                        
                     </label>
                 </>);
             default:
@@ -195,38 +197,10 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
                 // placeholder="질문 제목 입력"
             />
             </div>
-            {/* <span className='icon-outside'> */}
-            
-            {/* <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer', marginTop: '-15px'}} size='lg' icon={faImage} /> */}
-            {/* <QuestionTypeDropdown
-                selectedType={questionType}
-                onSelectType={handleQuestionTypeChange}
-            /> */}
-            {/* </span> */}
-        {/* </div> */}
         </div>
             <div className="question-options">
             {renderQuestionContent()}
             </div>
-            {/* <div className='question-tail'> */}
-                {/* <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faCopy}
-                  onClick={() => onDuplicate && onDuplicate()} // onDuplicate이 존재하는 경우에만 호출
-                /> */}
-                {/* <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faTrashCan} 
-                onClick={onDelete} 
-                /> */}
-                {/* <span className='question-tail-option'> */}
-                {/* ㅤ필수
-                <Form>
-                    <Form.Check 
-                    type="switch"
-                    id="custom-switch"
-                    // label="필수"
-                    />
-                </Form> */}
-                {/* <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faEllipsisVertical}/> */}
-                {/* </span> */}
-            {/* </div> */}
     </div>
     );
 };

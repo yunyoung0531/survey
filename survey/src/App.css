@@ -394,11 +394,18 @@
 
 .submit-and-cancel {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  width: 100%; /* 컨테이너를 전체 너비로 확장 */
   padding: 10px;
 }
 
+
 .preview-cancel {
   margin-left: 300px;
+}
+
+.form-control {
+  max-width: 170px; 
+  margin-left: 20px;
 }

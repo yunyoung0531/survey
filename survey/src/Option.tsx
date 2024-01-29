@@ -6,9 +6,9 @@ import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
 interface OptionProps {
     option: string;
     index: number;
-    questionType: string; 
-    moveOption: (dragIndex: number, hoverIndex: number) => void;
-    onUpdateOption: (index: number, newOption: string) => void; // 옵션 업데이트 함수 추가
+    questionType?: string; 
+    moveOption?: (dragIndex: number, hoverIndex: number) => void;
+    onUpdateOption?: (index: number, newOption: string) => void; // 옵션 업데이트 함수 추가
 }
 
 
@@ -25,7 +25,7 @@ const Option: React.FC<OptionProps> = ({ option, index, questionType, moveOption
     };
 
     const handleBlur = () => {
-        onUpdateOption(index, newOption); // 변경 사항을 상위 컴포넌트에 전달
+        onUpdateOption?.(index, newOption); // 변경 사항을 상위 컴포넌트에 전달
         setEditing(false);
     };
     
@@ -41,7 +41,7 @@ const Option: React.FC<OptionProps> = ({ option, index, questionType, moveOption
         accept: "option",
         hover(item: { index: number }) {
             if (item.index !== index) {
-                moveOption(item.index, index);
+                moveOption?.(item.index, index);
                 item.index = index;
             }
         }
