@@ -6,6 +6,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend'; 
 import TitleAndDescription from './TitleAndDescription';
 import { Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 interface QuestionData {
     id: string;
@@ -31,11 +32,21 @@ interface PreviewProps {
 }
 
 const Preview: React.FC<PreviewProps> = ({ title, description }) => {
+    let navigate = useNavigate();
+    const handleSubmit = () => {
+        // 'responses' 상태를 'Result' 페이지로 전달
+        navigate('/result', { state: { responses, questions: questionsFromRedux } });
+    };
+    
     const [responses, setResponses] = useState<Responses>({});
     const questionsFromRedux = useSelector((state: RootState) => state.questions.questions);
 
     const handleResponseChange = (questionId: string, response: string) => {
-        setResponses({...responses, [questionId]: response});
+        console.log("handleResponseChange called", questionId, response);
+        const newResponses = {...responses, [questionId]: response};
+        console.log(newResponses);
+        setResponses(newResponses);
+
     };
 
     return (
@@ -74,7 +85,7 @@ const Preview: React.FC<PreviewProps> = ({ title, description }) => {
         </DndProvider>
         </div>
         <div className='submit-and-cancel'>
-            <Button className='submit-btn'>제출</Button>{' '}
+            <Button className='submit-btn' onClick={handleSubmit}>제출</Button>{' '}
             <div className='preview-cancel'>양식 지우기</div>
         </div>
         </div>

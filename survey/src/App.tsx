@@ -22,6 +22,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Preview from './Preview';
 import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar';
+import Result from './Result';
   // 각 질문의 제목과 유형을 저장하기 위한 새로운 인터페이스
 interface QuestionData {
   id: string;
@@ -225,6 +226,9 @@ interface QuestionData {
 
               <Route path="/preview" element={<>
                 <Preview title={title} description={description}/>
+              </>} />
+              <Route path="/result" element={<>
+                <Result />
               </>} />
           </Routes>
     );

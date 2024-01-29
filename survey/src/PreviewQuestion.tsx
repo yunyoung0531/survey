@@ -52,6 +52,10 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
     //     onUpdateTitle?.(e.target.value); // 상위 컴포넌트에 변경 사항 전달
     // };
 
+    const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        onUserResponse?.(event.target.value); // 사용자 응답 처리
+    };
+
     const addOption = (type: string) => {
         onAddOption?.(`옵션 ${(options.length) + 1}`, type); 
     };
@@ -92,7 +96,7 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
                         <input
                         type="text"
                         placeholder="단답형 텍스트"
-                        // onChange={handleTitleChange} 
+                        onChange={handleTitleChange} 
                         className='short-input-pre'
                         />
                     </div>;
@@ -101,14 +105,16 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
                         <input
                         type="text"
                         placeholder="장문형 텍스트"
-                        // onChange={handleTitleChange} 
+                        onChange={handleTitleChange} 
                         className='long-input-pre'
                         />
                 </div>;
             case '객관식 질문': 
                 return (<>
                     {options.map((option, index) => (
-                        <PreviewOption key={index} option={option} index={index} questionType={questionType} />
+                        <PreviewOption key={index} option={option} index={index} questionType={questionType} onUserResponse={onUserResponse}
+                        />
+                        
                     ))}
                     <label className="option">
                         {/* <span className='plus-option' onClick={() => addOption('객관식 질문')}>
@@ -134,7 +140,7 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
                         //     <input type="checkbox" name="option" value={option} />
                         //     <span>{option}</span>
                         // </label>
-                        <PreviewOption key={index} option={option} index={index} questionType={questionType}
+                        <PreviewOption key={index} option={option} index={index} questionType={questionType} onUserResponse={onUserResponse}
                         />
                     ))}
                     <label className="option">
@@ -151,9 +157,12 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
                         <PreviewOption key={index} option={option} index={index} options={options} questionType={questionType}
                         />
                     ))} */}
-                    <select className="form-control">
+                    <select className="form-control"
+                    onChange={(e) => onUserResponse?.(e.target.value)}
+                    
+                    >
                     {localOptions.map((option, idx) => (
-                        <option key={idx} value={option}>
+                        <option key={idx} value={option} >
                             {option}
                         </option>
                     ))}

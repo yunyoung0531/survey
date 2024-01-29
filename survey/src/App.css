@@ -386,23 +386,24 @@
   color: #ffffff !important;
   border-color: #673AB7 !important;
   background-color: #673AB7 !important;
-  margin-right: 320px;
-  justify-content: start;
-  /* padding-left: -10px !important; */
-  /* padding-right: -10px !important; */
+  /* margin-right: 320px; */
+  /* justify-content: start; */
+  flex: 0 0 auto; /* 버튼 크기가 내용에 맞게 조정되도록 함 */
 }
 
 .submit-and-cancel {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%; /* 컨테이너를 전체 너비로 확장 */
+  width: 51.6%; /* 컨테이너를 전체 너비로 확장 */
   padding: 10px;
 }
 
 
 .preview-cancel {
-  margin-left: 300px;
+  flex: 0 0 auto;
+  color: #6533bb;
+  cursor: pointer;
 }
 
 .form-control {
