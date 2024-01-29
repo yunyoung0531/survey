@@ -12,6 +12,7 @@ import { faGrip } from '@fortawesome/free-solid-svg-icons';
 import './App.css';
 import { useDrag, useDrop } from 'react-dnd';
 import Option from './Option';
+// import { Dropdown, DropdownButton } from 'react-bootstrap';
 
 interface QuestionProps {   
     questionTitle: string;
@@ -26,7 +27,7 @@ interface QuestionProps {
     id: string; // 질문의 고유 ID 추가
     onMove?: (dragIndex: number, hoverIndex: number) => void; // 질문 순서 변경 핸들러
     index: number; // 질문의 현재 인덱스
-    moveOption?: (dragIndex: number, hoverIndex: number) => void; // moveOption 함수 추가
+    moveOption?: (dragIndex: number, hoverIndex: number) => void; 
     onUpdateOptions?: (newOptions: string[]) => void; // 옵션을 업데이트하는 콜백
     onUserResponse?: (response: string) => void;  // 옵셔널로 변경
 }
@@ -124,11 +125,10 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
                 </>);
             case '체크박스ㅤ':
                 return (<>
-                    <label className="option">
-                    {/* <FontAwesomeIcon icon={faGripVertical} style={{color: "#bababa", marginRight: '10px', cursor: 'pointer'}} size='sm' /> */}
+                    {/* <label className="option">
                     <input type="checkbox" name="option" />
                     <span>옵션 1</span>
-                    </label>
+                    </label> */}
                     {options.map((option, index) => (
                         // <label className="option" key={index}>
                         //     <FontAwesomeIcon icon={faGripVertical} style={{color: "#bababa", marginRight: '10px', cursor: 'pointer'}} size='sm' />
@@ -147,16 +147,15 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
             
             case '드롭다운ㅤ':
                 return (<>
-                    <label className="option" >
-                    {/* <FontAwesomeIcon icon={faGripVertical} style={{color: "#bababa", marginRight: '10px', cursor: 'pointer'}} size='sm' /> */}
+                    {/* <label className="option" >
                         <span>1 옵션 1</span>
-                    </label>
+                    </label> */}
                     {options.map((option, index) => (
-                        <Option key={index} option={option} index={index}questionType={questionType}   moveOption={moveOption || (() => {})} // moveOption이 undefined일 경우 빈 함수 제공
+                        <Option key={index} option={option} index={index} questionType={questionType}   moveOption={moveOption || (() => {})} // moveOption이 undefined일 경우 빈 함수 제공
                         onUpdateOption={updateOption} />
                     ))}
                     <label className="option">
-                        <span className='plus-option' onClick={()=>{addOption('드롭다운ㅤ')}}>옵션 추가</span>
+                        {/* <span className='plus-option' onClick={()=>{addOption('드롭다운ㅤ')}}>옵션 추가</span> */}
                         
                     </label>
                 </>);
@@ -209,14 +208,14 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
             <div className="question-options">
             {renderQuestionContent()}
             </div>
-            <div className='question-tail'>
+            {/* <div className='question-tail'> */}
                 {/* <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faCopy}
                   onClick={() => onDuplicate && onDuplicate()} // onDuplicate이 존재하는 경우에만 호출
                 /> */}
                 {/* <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faTrashCan} 
                 onClick={onDelete} 
                 /> */}
-                <span className='question-tail-option'>
+                {/* <span className='question-tail-option'> */}
                 {/* ㅤ필수
                 <Form>
                     <Form.Check 
@@ -226,8 +225,8 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
                     />
                 </Form> */}
                 {/* <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faEllipsisVertical}/> */}
-                </span>
-            </div>
+                {/* </span> */}
+            {/* </div> */}
     </div>
     );
 };

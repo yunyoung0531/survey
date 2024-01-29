@@ -105,17 +105,12 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                 </>);
             case '체크박스ㅤ':
                 return (<>
-                    <label className="option">
+                    {/* <label className="option">
                     <FontAwesomeIcon icon={faGripVertical} style={{color: "#bababa", marginRight: '10px', cursor: 'pointer'}} size='sm' />
                     <input type="checkbox" name="option" />
                     <span>옵션 1</span>
-                    </label>
+                    </label> */}
                     {options.map((option, index) => (
-                        // <label className="option" key={index}>
-                        //     <FontAwesomeIcon icon={faGripVertical} style={{color: "#bababa", marginRight: '10px', cursor: 'pointer'}} size='sm' />
-                        //     <input type="checkbox" name="option" value={option} />
-                        //     <span>{option}</span>
-                        // </label>
                         <Option key={index} option={option} index={index} questionType={questionType}   moveOption={moveOption || (() => {})} // moveOption이 undefined일 경우 빈 함수 제공
                         onUpdateOption={updateOption}/>
                     ))}
@@ -128,10 +123,10 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
             
             case '드롭다운ㅤ':
                 return (<>
-                    <label className="option" >
+                    {/* <label className="option" >
                     <FontAwesomeIcon icon={faGripVertical} style={{color: "#bababa", marginRight: '10px', cursor: 'pointer'}} size='sm' />
                         <span>1 옵션 1</span>
-                    </label>
+                    </label> */}
                     {options.map((option, index) => (
                         <Option key={index} option={option} index={index}questionType={questionType}   moveOption={moveOption || (() => {})} // moveOption이 undefined일 경우 빈 함수 제공
                         onUpdateOption={updateOption} />

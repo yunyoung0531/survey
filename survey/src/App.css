@@ -82,6 +82,7 @@
 .question-options{
   display: flex;
   flex-direction: column;
+  margin-bottom: -40px;
 }
 
 
@@ -379,4 +380,25 @@
 .eye-icon {
   color: #575757;
   cursor: pointer;
+}
+
+.submit-btn {
+  color: #ffffff !important;
+  border-color: #673AB7 !important;
+  background-color: #673AB7 !important;
+  margin-right: 320px;
+  justify-content: start;
+  /* padding-left: -10px !important; */
+  /* padding-right: -10px !important; */
+}
+
+.submit-and-cancel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.preview-cancel {
+  margin-left: 300px;
 }

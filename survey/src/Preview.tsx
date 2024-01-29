@@ -5,6 +5,7 @@ import { RootState } from './store';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend'; 
 import TitleAndDescription from './TitleAndDescription';
+import { Button } from 'react-bootstrap';
 
 interface QuestionData {
     id: string;
@@ -71,6 +72,10 @@ const Preview: React.FC<PreviewProps> = ({ title, description }) => {
             ))}
             </div>
         </DndProvider>
+        </div>
+        <div className='submit-and-cancel'>
+            <Button className='submit-btn'>제출</Button>{' '}
+            <div className='preview-cancel'>양식 지우기</div>
         </div>
         </div>
     );
