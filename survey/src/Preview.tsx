@@ -14,6 +14,7 @@ interface QuestionData {
     type: string;
     options: string[];
     // onUserResponse: (response: string) => void; 
+    isRequired: boolean;
 }
 
 interface Responses {
@@ -32,6 +33,8 @@ interface PreviewProps {
 }
 
 const Preview: React.FC<PreviewProps> = ({ title, description }) => {
+    const [isRequired, setIsRequired] = useState(false);
+
     let navigate = useNavigate();
     const handleSubmit = () => {
         // 'responses' 상태를 'Result' 페이지로 전달
@@ -77,7 +80,20 @@ const Preview: React.FC<PreviewProps> = ({ title, description }) => {
                     questionTitle={question.title}
                     questionType={question.type}
                     options={question.options}
-                    onUserResponse={(response) => handleResponseChange(question.id, response)}
+                    isRequired={question.isRequired} // 필수 여부를 prop로 전달
+                    onUserResponse={(response) => {
+                         // response가 객체인 경우, 객체의 값을 추출하여 handleResponseChange 호출
+                        if (typeof response === 'object') {
+                            // 객체에서 키를 기준으로 값을 추출하는 로직
+                            // 예를 들어 "기타" 입력 값 처리
+                            const otherResponse = response["기타..."]; // "기타..."가 키인 경우
+                            handleResponseChange(question.id, otherResponse);
+                        } else {
+                            // response가 문자열인 경우, 직접 호출
+                            handleResponseChange(question.id, response);
+                        }
+                    }}
+                    
                     />
                 </div>
             ))}

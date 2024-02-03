@@ -15,7 +15,7 @@ import PreviewOption from './PreviewOption';
 // import { Dropdown, DropdownButton } from 'react-bootstrap';
 
 interface QuestionProps {   
-    questionTitle: string;
+    questionTitle: string;  
     questionType: string;
     onDuplicate?: () => void;
     onQuestionTypeChange?: (type: string) => void;
@@ -30,9 +30,11 @@ interface QuestionProps {
     moveOption?: (dragIndex: number, hoverIndex: number) => void; 
     onUpdateOptions?: (newOptions: string[]) => void; // 옵션을 업데이트하는 콜백
     onUserResponse?: (response: string) => void;  // 옵셔널로 변경
+
+    isRequired: boolean;
 }
 
-const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType, onDuplicate, onQuestionTypeChange, onDelete, onUpdateTitle, options, onAddOption, id, index, onMove, moveOption, onUpdateOptions, onUserResponse }) => {
+const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType, onDuplicate, onQuestionTypeChange, onDelete, onUpdateTitle, options, onAddOption, id, index, onMove, moveOption, onUpdateOptions, onUserResponse, isRequired }) => {
     // 사용자 응답 핸들링 예시
     // const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //     onUserResponse(event.target.value);
@@ -78,13 +80,6 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
         setLocalOptions(updatedOptions);
         onUpdateOptions?.(updatedOptions); // 변경사항을 상위 컴포넌트로 전달
     };
-    // const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     // 입력 필드의 새로운 값으로 상태를 업데이트합니다.
-    //     setEditTitle(event.target.value);
-    //     // 상위 컴포넌트의 변경 핸들러를 호출하여 변경 사항을 전달합니다.
-    //     // 여기서 옵셔널 체이닝을 사용하여 함수가 정의되어 있을 때만 호출합니다.
-    //     onUpdateTitle?.(event.target.value);
-    // };
 
     const renderQuestionContent = () => {
         const hasOtherOption = localOptions.includes('기타');
@@ -198,6 +193,7 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
         <div className='question-title-container'>
         {/* <div className="question-title"> */}
             <div className="question-text-preview">
+            {isRequired || <span className="required-indicator">*</span>}
             <input
                 // type="text"
                 value={editTitle}
@@ -205,6 +201,7 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
                 className="question-title-input-preview"
                 // placeholder="질문 제목 입력"
             />
+            
             </div>
         </div>
             <div className="question-options">

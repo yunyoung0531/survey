@@ -29,10 +29,25 @@ interface QuestionData {
   title: string;
   type: string;
   options: string[];
+  isRequired:boolean;
 }
 
-  const App: React.FC = () => {
-    const [userInputTitle, setUserInputTitle] = useState(""); // 질문 제목 상태 관리
+const App: React.FC = () => {
+  const [questions, setQuestions] = useState<QuestionData[]>([]); // 질문 배열 상태
+
+  // 질문의 "필수" 상태를 토글하는 함수
+  const toggleIsRequired = (id: string) => {
+    setQuestions(
+      questions.map((question) =>
+        question.id === id ? { ...question, isRequired: !question.isRequired } : question
+      )
+    );
+  };
+  const [isRequired, setIsRequired] = useState(false);
+  const handleToggleRequired = (required: boolean) => {
+    setIsRequired(required);
+  };
+  const [userInputTitle, setUserInputTitle] = useState(""); // 질문 제목 상태 관리
 
       const handleUserInputTitleChange = (newTitle: string) => {
         setUserInputTitle(newTitle); // 사용자 입력에 따라 제목 상태 업데이트
@@ -53,11 +68,26 @@ interface QuestionData {
       id: newQuestionId,
       title: `새로운 질문 ${questionsFromRedux.length + 1}`,
       type: '객관식 질문',
-      options: ['옵션 1']
+      options: ['옵션 1'],
+      isRequired: false,
     };
     // 액션을 디스패치하여 새 질문을 추가합니다.
     dispatch(addQuestion(newQuestion));
   };
+
+    // 질문의 "필수" 상태를 변경하는 함수
+  const handleToggleIsRequired = (id: string) => {
+    const question = questionsFromRedux.find(question => question.id === id);
+    if (question) {
+      const updatedQuestion = {
+        ...question,
+        isRequired: !question.isRequired
+      };
+      // 액션을 디스패치하여 질문의 "필수" 상태를 업데이트합니다.
+      dispatch(updateQuestion(updatedQuestion));
+    }
+  };
+
 
   // 질문을 복제하는 함수
   const handleDuplicateQuestion = (index: number) => {
@@ -79,17 +109,19 @@ interface QuestionData {
 
   // 질문 제목을 업데이트하는 함수
   const handleUpdateQuestionTitle = (id: string, newTitle: string) => {
-    // 업데이트할 질문의 새 데이터를 생성합니다.
-    const updatedQuestion = {
-      id,
+      // 업데이트할 질문의 새 데이터를 생성합니다.
+  const questionToUpdate = questionsFromRedux.find(q => q.id === id);
+  if (questionToUpdate) {
+    const updatedQuestion: QuestionData = {
+      ...questionToUpdate,
       title: newTitle,
-      // type과 options은 현재 질문의 데이터를 유지합니다.
-      type: questionsFromRedux.find(questionsFromRedux => questionsFromRedux.id === id)?.type || '',
-      options: questionsFromRedux.find(questionsFromRedux => questionsFromRedux.id === id)?.options || []
+      // isRequired 필드를 현재 값으로 유지합니다.
+      isRequired: questionToUpdate.isRequired
     };
-    // 액션을 디스패치하여 질문 제목을 업데이트합니다.
     dispatch(updateQuestion(updatedQuestion));
-  };
+  
+  }
+};
 
     const handleTitleClick = () => {
       setIsTitleEditing(true);
@@ -149,6 +181,7 @@ interface QuestionData {
 
 
     return (
+      <>
           <Routes>
             <Route path="/" element={<>
               <NavBar title={title} description={description} userInputTitle={userInputTitle} />
@@ -200,7 +233,9 @@ interface QuestionData {
                         onUpdateOptions={(newOptions) => handleUpdateQuestionOptions(question.id, newOptions)}
                         userInputTitle={userInputTitle}
                         onUpdateUserInputTitle={handleUserInputTitleChange}
-                      />
+                        // isRequired={question.isRequired}
+                        // onToggleRequired={() => toggleIsRequired(question.id)}
+                        />
                       </div>
                     ))}
                   </div>
@@ -231,7 +266,8 @@ interface QuestionData {
                 <Result />
               </>} />
           </Routes>
+          </>
     );
-  }
+}
 
-  export default App;
+export default App;

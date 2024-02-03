@@ -2,6 +2,7 @@ import React, { useState} from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 interface OptionProps {
     option: string;
@@ -9,10 +10,12 @@ interface OptionProps {
     questionType?: string; 
     moveOption?: (dragIndex: number, hoverIndex: number) => void;
     onUpdateOption?: (index: number, newOption: string) => void; // 옵션 업데이트 함수 추가
+    onDeleteOption?: (index: number) => void; 
+    totalOptions: number;
 }
 
 
-const Option: React.FC<OptionProps> = ({ option, index, questionType, moveOption, onUpdateOption }) => {
+const Option: React.FC<OptionProps> = ({ option, index, questionType, moveOption, onUpdateOption, onDeleteOption, totalOptions }) => {
     const [editing, setEditing] = useState(false);
     const [newOption, setNewOption] = useState(option);
 
@@ -29,6 +32,10 @@ const Option: React.FC<OptionProps> = ({ option, index, questionType, moveOption
         setEditing(false);
     };
     
+    const handleDelete = () => {
+        onDeleteOption?.(index); // 옵션 삭제 함수를 호출
+    };
+
     const [{ isDragging }, drag] = useDrag(() => ({
         type: 'option',
         item: { index },
@@ -56,7 +63,7 @@ const Option: React.FC<OptionProps> = ({ option, index, questionType, moveOption
             {/* <FontAwesomeIcon icon={faGripVertical} style={{color: "#bababa", marginRight: '10px', cursor: 'move'}} size='sm' />
             <input type={inputType} name="option" value={option} />
             <span>{option}</span> */}
-            <FontAwesomeIcon icon={faGripVertical} style={{color: "#bababa", marginRight: '10px', cursor: 'move'}} size='sm' />
+            <FontAwesomeIcon icon={faGripVertical} className='option-move-icon' style={{color: "#bababa", marginRight: '10px', cursor: 'move'}} size='sm' />
                 <input type={inputType} name="option" value={option} readOnly />
                 {editing ? (
                     <input
@@ -70,6 +77,7 @@ const Option: React.FC<OptionProps> = ({ option, index, questionType, moveOption
                 ) : (
                     <span onDoubleClick={handleClick}>{option}</span>
                 )}
+                {totalOptions >= 2 ? <FontAwesomeIcon icon={faXmark} className='xmark-icon' onClick={handleDelete}/> : null}
             </label>
         </div>
         </>

@@ -35,6 +35,13 @@ interface QuestionProps {
 }
 
 const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDuplicate, onQuestionTypeChange, onDelete, onUpdateTitle, options, onAddOption, id, index, onMove, moveOption, onUpdateOptions, onUserResponse }) => {
+    const [isRequired, setIsRequired] = useState<boolean>(false);
+      // isRequired 상태 업데이트 함수
+    const handleIsRequiredChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setIsRequired(e.target.checked);
+        // 필수 값 변경 로직이 필요한 경우 여기에 추가
+    };
+
     // 사용자 응답 핸들링 예시
     // const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //     onUserResponse(event.target.value);
@@ -77,6 +84,15 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
         onUpdateOptions?.(updatedOptions); // 변경사항을 상위 컴포넌트로 전달
     };
 
+    const handleDeleteOption = (indexToDelete: number) => {
+        const newOptions = options.filter((_, index) => index !== indexToDelete);
+        if (options.length >= 2) {
+            setLocalOptions(newOptions); 
+            onUpdateOptions?.(newOptions);
+        }
+    };
+    
+
     const renderQuestionContent = () => {
         const hasOtherOption = localOptions.includes('기타');
 
@@ -88,8 +104,8 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
             case '객관식 질문': 
                 return (<>
                     {options.map((option, index) => (
-                        <Option key={index} option={option} index={index} questionType={questionType}   moveOption={moveOption || (() => {})} // moveOption이 undefined일 경우 빈 함수 제공
-                        onUpdateOption={updateOption}/>
+                        <Option key={index} option={option} index={index} questionType={questionType}   moveOption={moveOption || (() => {})} onDeleteOption={handleDeleteOption} // moveOption이 undefined일 경우 빈 함수 제공
+                        onUpdateOption={updateOption} totalOptions={options.length}/>
                     ))}
                     <label className="option">
                         <span className='plus-option' onClick={() => addOption('객관식 질문')}>
@@ -97,7 +113,7 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                         </span>
                         {!hasOtherOption && (
                         <>
-                            <span> 또는</span>
+                            <span>⠀또는⠀</span>
                             <span className='plus-etc' onClick={addOtherOption}> '기타' 추가</span>
                         </>
                         )}
@@ -111,13 +127,14 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                     <span>옵션 1</span>
                     </label> */}
                     {options.map((option, index) => (
-                        <Option key={index} option={option} index={index} questionType={questionType}   moveOption={moveOption || (() => {})} // moveOption이 undefined일 경우 빈 함수 제공
-                        onUpdateOption={updateOption}/>
+                        <Option key={index} option={option} index={index} questionType={questionType}   moveOption={moveOption || (() => {})} onDeleteOption={handleDeleteOption} // moveOption이 undefined일 경우 빈 함수 제공
+                        onUpdateOption={updateOption} totalOptions={options.length}
+                        />
                     ))}
                     <label className="option">
                         <span className='plus-option' onClick={()=>{addOption('체크박스ㅤ')}}>옵션 추가</span>
-                        <span> 또는</span>
-                        <span className='plus-etc' onClick={()=>{addOtherOption()}}> '기타' 추가</span>
+                        <span>⠀또는⠀</span>
+                        <span className='plus-etc' onClick={()=>{addOtherOption()}}>'기타' 추가</span>
                     </label>
                 </>);
             
@@ -128,8 +145,8 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                         <span>1 옵션 1</span>
                     </label> */}
                     {options.map((option, index) => (
-                        <Option key={index} option={option} index={index}questionType={questionType}   moveOption={moveOption || (() => {})} // moveOption이 undefined일 경우 빈 함수 제공
-                        onUpdateOption={updateOption} />
+                        <Option key={index} option={option} index={index}questionType={questionType}   moveOption={moveOption || (() => {})} onDeleteOption={handleDeleteOption} // moveOption이 undefined일 경우 빈 함수 제공
+                        onUpdateOption={updateOption} totalOptions={options.length}/>
                     ))}
                     <label className="option">
                         <span className='plus-option' onClick={()=>{addOption('드롭다운ㅤ')}}>옵션 추가</span>
@@ -202,7 +219,7 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                     <Form.Check 
                     type="switch"
                     id="custom-switch"
-                    // label="필수"
+                    onChange={handleIsRequiredChange}
                     />
                 </Form>
                 <FontAwesomeIcon style={{color: '#5e5e5e', cursor: 'pointer'}} icon={faEllipsisVertical}/>

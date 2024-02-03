@@ -1,4 +1,3 @@
-// Result 컴포넌트
 import React from 'react';
 import { useLocation } from 'react-router-dom'; // React Router의 hook을 사용
 import { QuestionData } from './store'; 
@@ -27,11 +26,11 @@ const Result: React.FC = () => {
                     className='title-editing-input-result'
                     type='title'
                 />
-                <TitleAndDescription
+                {/* <TitleAndDescription
                     value={description}
                     className='description-editing-input-result'
                     type='description'
-                />
+                /> */}
                 </div>
             
             <div className='content-container-result' >

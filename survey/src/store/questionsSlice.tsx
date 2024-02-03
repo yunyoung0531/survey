@@ -5,6 +5,7 @@ interface QuestionData {
     title: string;
     type: string;
     options: string[];
+    isRequired: boolean;
 }
 
 interface QuestionsState {
@@ -13,7 +14,7 @@ interface QuestionsState {
 
 const initialState: QuestionsState = {
     questions: [
-        { id: '제목없는 질문', title: '제목없는 질문', type: '객관식 질문', options: ['옵션 1'] }
+        { id: '제목없는 질문', title: '제목없는 질문', type: '객관식 질문', options: ['옵션 1'], isRequired: true }
     ]
 };
 
