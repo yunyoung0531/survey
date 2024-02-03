@@ -433,6 +433,7 @@
 .plus-option {
   color: #727272;
   cursor: pointer;
+  margin-left: 10px;
 }
 
 .plus-etc {

@@ -113,8 +113,7 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                         </span>
                         {!hasOtherOption && (
                         <>
-                            <span>⠀또는⠀</span>
-                            <span className='plus-etc' onClick={addOtherOption}> '기타' 추가</span>
+                            {options.includes('기타...') ? null : <><span>⠀또는⠀</span><span className='plus-etc' onClick={addOtherOption}> '기타' 추가</span></>}
                         </>
                         )}
                     </label>
@@ -133,8 +132,11 @@ const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDupl
                     ))}
                     <label className="option">
                         <span className='plus-option' onClick={()=>{addOption('체크박스ㅤ')}}>옵션 추가</span>
-                        <span>⠀또는⠀</span>
-                        <span className='plus-etc' onClick={()=>{addOtherOption()}}>'기타' 추가</span>
+                        {!hasOtherOption && (
+                        <>
+                            {options.includes('기타...') ? null : <><span>⠀또는⠀</span><span className='plus-etc' onClick={addOtherOption}> '기타' 추가</span></>}
+                        </>
+                        )}
                     </label>
                 </>);
             
