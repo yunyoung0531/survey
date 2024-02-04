@@ -31,6 +31,7 @@ interface QuestionData {
   options: string[];
   isRequired:boolean;
 }
+const QuestionMemo = React.memo(Question);
 
 const App: React.FC = () => {
   const [questions, setQuestions] = useState<QuestionData[]>([]); // 질문 배열 상태
@@ -216,7 +217,7 @@ const App: React.FC = () => {
                   <div className='sur-test'>
                     {questionsFromRedux.map((question, index) => (
                       <div className='survey-container-detail' key={question.id}>
-                      <Question
+                        <QuestionMemo
                         key={question.id} // 질문의 고유 ID를 key로 사용
                         id={question.id} // 질문의 고유 ID
                         index={index} // 현재 질문의 인덱스

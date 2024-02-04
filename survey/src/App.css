@@ -263,6 +263,8 @@
   border-radius: 8px;
   justify-content: space-around; 
   margin-left: 12px;
+  position: sticky;
+  top: 100px;
 }
 
 .content-container {
