@@ -36,6 +36,10 @@
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }
+.survey-container-result > :first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
 
 
 .survey-header-result {
