@@ -12,8 +12,12 @@ interface QuestionsState {
     questions: QuestionData[];
 }
 
-const initialState: QuestionsState = {
+const savedQuestionsState = localStorage.getItem('questionsState');
+const parsedInitialState = savedQuestionsState ? JSON.parse(savedQuestionsState) : null;
+
+const initialState: QuestionsState = parsedInitialState || {
     questions: [
+        // 기본 질문 데이터 혹은 초기 데이터
         { id: '제목없는 질문', title: '제목없는 질문', type: '객관식 질문', options: ['옵션 1'], isRequired: true }
     ]
 };

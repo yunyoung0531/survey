@@ -193,7 +193,7 @@ const PreviewQuestion: React.FC<QuestionProps> = ({ questionTitle, questionType,
         <div className='question-title-container'>
         {/* <div className="question-title"> */}
             <div className="question-text-preview">
-            {isRequired && <span className="required-indicator">*</span>}
+            {/* {isRequired && <span className="required-indicator">*</span>} */}
             <input
                 // type="text"
                 value={editTitle}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-regular-svg-icons'
@@ -34,7 +34,7 @@ interface QuestionData {
 const QuestionMemo = React.memo(Question);
 
 const App: React.FC = () => {
-  const [questions, setQuestions] = useState<QuestionData[]>([]); // 질문 배열 상태
+  // const [questions, setQuestions] = useState<QuestionData[]>([]); // 질문 배열 상태
 
   // 질문의 "필수" 상태를 토글하는 함수
   const toggleIsRequired = (id: string) => {
@@ -179,8 +179,16 @@ const App: React.FC = () => {
       dispatch(updateQuestionOptions({ questionId, newOptions }));
     };
 
-
-
+    const [questions, setQuestions] = useState<QuestionData[]>(() => {
+      // localStorage에서 질문 데이터 불러오기
+      const savedQuestions = localStorage.getItem('questions');
+      return savedQuestions ? JSON.parse(savedQuestions) : [];
+    });
+    
+    useEffect(() => {
+      localStorage.setItem('questions', JSON.stringify(questions));
+    }, [questions]);
+    
     return (
       <>
           <Routes>

@@ -34,6 +34,7 @@ interface QuestionProps {
     onUpdateUserInputTitle: (newTitle: string) => void;
 }
 
+
 const Question: React.FC<QuestionProps> = ({ questionTitle, questionType, onDuplicate, onQuestionTypeChange, onDelete, onUpdateTitle, options, onAddOption, id, index, onMove, moveOption, onUpdateOptions, onUserResponse }) => {
     const [isRequired, setIsRequired] = useState<boolean>(false);
       // isRequired 상태 업데이트 함수
