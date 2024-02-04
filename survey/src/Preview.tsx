@@ -52,6 +52,17 @@ const Preview: React.FC<PreviewProps> = ({ title, description }) => {
 
     };
 
+    // 응답 초기화 함수
+    const clearResponses = () => {
+    setResponses({});
+    // `key` prop을 변경하여 PreviewQuestion 컴포넌트를 강제로 리셋
+    setForceReset(prev => !prev);
+    };
+
+    // `forceReset` 상태를 추가하여 PreviewQuestion 컴포넌트를 강제로 리셋할 수 있게 함
+    const [forceReset, setForceReset] = useState(false);
+
+
     return (
         <div className="app-container">
         <div className="survey-container">
@@ -74,7 +85,7 @@ const Preview: React.FC<PreviewProps> = ({ title, description }) => {
             {questionsFromRedux.map((question: QuestionData, index: number) => (
                 <div className='survey-container-detail-pre' key={question.id}>
                 <PreviewQuestion
-                    key={question.id}
+                    key={`${question.id}-${forceReset}`} // 이 key를 통해 컴포넌트를 리셋
                     id={question.id}
                     index={index}
                     questionTitle={question.title}
@@ -102,7 +113,7 @@ const Preview: React.FC<PreviewProps> = ({ title, description }) => {
         </div>
         <div className='submit-and-cancel'>
             <Button className='submit-btn' onClick={handleSubmit}>제출</Button>{' '}
-            <div className='preview-cancel'>양식 지우기</div>
+            <div className='preview-cancel' onClick={clearResponses}>양식 지우기</div>
         </div>
         </div>
     );
