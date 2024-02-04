@@ -17,9 +17,7 @@ const NavBar: React.FC<NavBarProps> = ({ title, description, userInputTitle }) =
         <Navbar className="bg-body-tertiary">
             <Container>
             <Navbar.Brand className='ms-auto'>
-                {/* <Link to="/preview"> */}
                 <FontAwesomeIcon onClick={()=>{navigate('/preview' , { state: { title, description, userInputTitle } })}}icon={faEye} className='eye-icon' />
-                {/* </Link> */}
             </Navbar.Brand>
             </Container>
         </Navbar>

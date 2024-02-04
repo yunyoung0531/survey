@@ -13,18 +13,17 @@ interface QuestionData {
     title: string;
     type: string;
     options: string[];
-    // onUserResponse: (response: string) => void; 
+    
     isRequired: boolean;
 }
 
 interface Responses {
-  [key: string]: string; // 또는 사용자 응답의 타입에 맞게 조정
+    [key: string]: string; 
 }
 
-// Question 컴포넌트의 Props 타입
 interface QuestionProps extends QuestionData {
     onUserResponse: (response: string) => void;
-    // 다른 필요한 props가 있다면 여기에 추가
+    
 }
 
 interface PreviewProps {
@@ -37,7 +36,7 @@ const Preview: React.FC<PreviewProps> = ({ title, description }) => {
 
     let navigate = useNavigate();
     const handleSubmit = () => {
-        // 'responses' 상태를 'Result' 페이지로 전달
+        
         navigate('/result', { state: { title, description, responses, questions: questionsFromRedux } });
     };
     
@@ -52,14 +51,13 @@ const Preview: React.FC<PreviewProps> = ({ title, description }) => {
 
     };
 
-    // 응답 초기화 함수
     const clearResponses = () => {
     setResponses({});
-    // `key` prop을 변경하여 PreviewQuestion 컴포넌트를 강제로 리셋
+    
     setForceReset(prev => !prev);
     };
 
-    // `forceReset` 상태를 추가하여 PreviewQuestion 컴포넌트를 강제로 리셋할 수 있게 함
+    
     const [forceReset, setForceReset] = useState(false);
 
 
@@ -85,22 +83,19 @@ const Preview: React.FC<PreviewProps> = ({ title, description }) => {
             {questionsFromRedux.map((question: QuestionData, index: number) => (
                 <div className='survey-container-detail-pre' key={question.id}>
                 <PreviewQuestion
-                    key={`${question.id}-${forceReset}`} // 이 key를 통해 컴포넌트를 리셋
+                    key={`${question.id}-${forceReset}`} 
                     id={question.id}
                     index={index}
                     questionTitle={question.title}
                     questionType={question.type}
                     options={question.options}
-                    isRequired={question.isRequired} // 필수 여부를 prop로 전달
+                    isRequired={question.isRequired} 
                     onUserResponse={(response) => {
-                         // response가 객체인 경우, 객체의 값을 추출하여 handleResponseChange 호출
                         if (typeof response === 'object') {
-                            // 객체에서 키를 기준으로 값을 추출하는 로직
-                            // 예를 들어 "기타" 입력 값 처리
-                            const otherResponse = response["기타..."]; // "기타..."가 키인 경우
+                            const otherResponse = response["기타..."]; 
                             handleResponseChange(question.id, otherResponse);
                         } else {
-                            // response가 문자열인 경우, 직접 호출
+                            
                             handleResponseChange(question.id, response);
                         }
                     }}

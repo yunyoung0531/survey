@@ -9,7 +9,7 @@ interface OptionProps {
     index: number;
     questionType?: string; 
     moveOption?: (dragIndex: number, hoverIndex: number) => void;
-    onUpdateOption?: (index: number, newOption: string) => void; // 옵션 업데이트 함수 추가
+    onUpdateOption?: (index: number, newOption: string) => void; 
     onDeleteOption?: (index: number) => void; 
     totalOptions: number;
 }
@@ -28,12 +28,12 @@ const Option: React.FC<OptionProps> = ({ option, index, questionType, moveOption
     };
 
     const handleBlur = () => {
-        onUpdateOption?.(index, newOption); // 변경 사항을 상위 컴포넌트에 전달
+        onUpdateOption?.(index, newOption); 
         setEditing(false);
     };
     
     const handleDelete = () => {
-        onDeleteOption?.(index); // 옵션 삭제 함수를 호출
+        onDeleteOption?.(index); 
     };
 
     const [{ isDragging }, drag] = useDrag(() => ({
@@ -57,12 +57,8 @@ const Option: React.FC<OptionProps> = ({ option, index, questionType, moveOption
     const inputType = questionType === '객관식 질문' ? 'radio' : 'checkbox';
 
     return (
-        <>
         <div ref={(node) => drag(drop(node))}  key={index}>
             <label className="option">
-            {/* <FontAwesomeIcon icon={faGripVertical} style={{color: "#bababa", marginRight: '10px', cursor: 'move'}} size='sm' />
-            <input type={inputType} name="option" value={option} />
-            <span>{option}</span> */}
             <FontAwesomeIcon icon={faGripVertical} className='option-move-icon' style={{color: "#bababa", marginRight: '10px', cursor: 'move'}} size='sm' />
                 <input type={inputType} name="option" value={option} readOnly />
                 {editing ? (
@@ -80,7 +76,6 @@ const Option: React.FC<OptionProps> = ({ option, index, questionType, moveOption
                 {totalOptions >= 2 ? <FontAwesomeIcon icon={faXmark} className='xmark-icon' onClick={handleDelete}/> : null}
             </label>
         </div>
-        </>
     );
 };
 
